@@ -15,9 +15,9 @@ A mobile workspace for managing rooms, guests, reservations, and daily hotel ope
 
 Hotel Management System is a Flutter application designed to help hotel staff organize room inventory, maintain guest records, manage reservations, and handle arrivals and departures. The planned experience supports offline use and adapts to both phones and tablets.
 
-> **Development status:** The Android and iOS projects are initialized with a minimal app screen. The features below are planned and are not yet implemented.
+> **Development status:** Core data models, validation, booking rules, local persistence, and startup recovery are implemented. The app currently opens a minimal workspace; the management screens below are still planned.
 
-## Planned Features
+## Planned Management Experience
 
 | Area | Capabilities |
 | --- | --- |
@@ -27,8 +27,16 @@ Hotel Management System is a Flutter application designed to help hotel staff or
 | Reservations | Select dates, assign rooms and guests, and check room availability |
 | Check-in / Check-out | Record arrivals and departures with automatic occupancy updates |
 | Search & Filters | Find rooms and guests, and filter rooms by status |
-| Local Storage | Keep hotel records available offline and across app restarts |
 | Adaptive Layouts | A consistent interface for Android/iOS phones and tablets |
+
+## Implemented Foundation
+
+- Immutable room, guest, and booking records with calendar dates and integer monetary values.
+- Shared validation, reservation conflict checks, occupancy transitions, and safe deletion rules.
+- Local persistence using [Hive Community Edition](https://pub.dev/packages/hive_ce), with a versioned snapshot and validation of stored relationships.
+- Serialized saves that publish state after storage succeeds, plus startup loading and retry states.
+
+The current store keeps a complete snapshot in the app's application-support directory. It is designed for a modest, single-device dataset and is not encrypted.
 
 ## Getting Started
 
@@ -80,8 +88,15 @@ Release signing must be configured before distributing the app. The Android scaf
 ```text
 lib/
 ├── main.dart                 # Application entry point
-└── app/
-    └── app.dart              # Flutter application
+├── app/                      # App composition and startup recovery
+├── application/              # State controller and serialized mutations
+├── domain/
+│   ├── models/               # Rooms, guests, bookings, and calendar dates
+│   ├── services/             # Validation and business rules
+│   └── repositories/         # Persistence contract
+└── data/local/               # Hive adapter and versioned snapshot codec
+test/                         # Domain, storage, state, and startup tests
+integration_test/             # Native storage smoke test
 android/                      # Android platform project
 ios/                          # iOS platform project
 pubspec.yaml                  # Dependencies and app version
@@ -89,7 +104,7 @@ pubspec.lock                  # Resolved dependency versions
 analysis_options.yaml         # Dart analysis rules
 ```
 
-Business rules, persistence, and feature screens will be introduced as development progresses, keeping application logic separate from the interface.
+Business rules and persistence are separate from the interface. Feature screens will use the shared application controller as they are introduced.
 
 ## App Identity
 
@@ -103,10 +118,19 @@ Business rules, persistence, and feature screens will be introduced as developme
 
 ## Code Quality
 
-Run static analysis with:
+Run static analysis and the automated suite:
 
 ```sh
 flutter analyze
+flutter test
 ```
 
-Dependency resolution and static analysis passed during initialization. Native builds and device execution are pending verification. Automated tests will be added with the core functionality.
+**Verified:** static analysis passes and all 65 automated tests pass, including real Hive file writes/reopenings, corrupt-data recovery behavior, booking rules, save failures, and startup UI states.
+
+The native storage smoke test is available for an Android emulator/device or iOS simulator/device:
+
+```sh
+flutter test integration_test/storage_smoke_test.dart -d <device-id>
+```
+
+Native build and device execution remain pending verification. The file-backed storage tests run on the development host; they do not replace the native smoke test.
