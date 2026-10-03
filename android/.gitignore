@@ -1,0 +1,11 @@
+# Generated/local Android files; keep the Gradle wrapper and configuration tracked.
+.gradle/
+.kotlin/
+.cxx/
+.externalNativeBuild/
+captures/
+local.properties
+key.properties
+**/GeneratedPluginRegistrant.java
+**/*.keystore
+**/*.jks

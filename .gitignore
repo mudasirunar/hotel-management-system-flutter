@@ -1,0 +1,88 @@
+# Dart and Flutter generated files
+.dart_tool/
+.packages
+.pub/
+.pub-cache/
+.flutter-plugins
+.flutter-plugins-dependencies
+.widget_preview/
+build/
+coverage/
+**/doc/api/
+app.*.symbols
+app.*.map.json
+
+# Android and native build caches
+.gradle/
+.kotlin/
+.cxx/
+.externalNativeBuild/
+/android/local.properties
+/android/captures/
+/android/app/debug/
+/android/app/profile/
+/android/app/release/
+*.class
+*.hprof
+
+# iOS generated and user-specific files (additional rules in ios/.gitignore)
+Pods/
+.symlinks/
+.swiftpm/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+/ios/Flutter/ephemeral/
+/ios/Flutter/Generated.xcconfig
+/ios/Flutter/flutter_export_environment.sh
+/ios/Flutter/.last_build_id
+
+# Build packages, symbols, logs, and crash/compiler diagnostics
+*.apk
+*.aab
+*.ipa
+*.xcarchive/
+*.dSYM/
+*.log
+*.crash
+*.ips
+*.dmp
+hs_err_pid*
+replay_pid*
+.build/
+.buildlog/
+/logs/
+
+# IDE, editor, and temporary files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.history/
+*.swp
+*.swo
+*~
+*.tmp
+*.temp
+migrate_working_dir/
+
+# Local environment and signing credentials
+.env
+.env.*
+!.env.example
+/android/key.properties
+*.jks
+*.keystore
+*.p12
+*.p8
+*.mobileprovision
+*.provisionprofile
+
+# Operating-system metadata
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+
+# Keep source, screenshots, .metadata, app lockfiles, and build configuration tracked.
