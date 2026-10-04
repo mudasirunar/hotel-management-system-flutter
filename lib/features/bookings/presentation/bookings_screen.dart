@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../application/hotel_controller.dart';
 import '../../../application/theme_controller.dart';
 import '../../../domain/models/booking.dart';
+import '../../../domain/models/hotel_state.dart';
 import '../../../shared/formatting/guest_details.dart';
 import '../../../shared/formatting/money.dart';
 import '../../../shared/widgets/empty_state_view.dart';
@@ -411,11 +412,12 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
   Widget _bookingCard(
     BuildContext context,
-    dynamic state,
+    HotelState state,
     Booking booking,
     ColorScheme scheme,
   ) {
     final theme = Theme.of(context);
+    final dark = theme.brightness == Brightness.dark;
     final room = state.rooms.any((r) => r.id == booking.roomId)
         ? state.room(booking.roomId)
         : null;
@@ -425,8 +427,36 @@ class _BookingsScreenState extends State<BookingsScreen> {
     final nights = booking.nights;
     final totalCost = nights * booking.nightlyRateMinorSnapshot;
 
-    return Card(
-      elevation: 0,
+    final (statusColor, statusBg, statusBorder, statusIcon) =
+        switch (booking.status) {
+          BookingStatus.checkedIn => (
+            dark ? const Color(0xFF93C5FD) : const Color(0xFF1E3A8A),
+            dark ? const Color(0xFF1E293B) : const Color(0xFFEFF6FF),
+            dark ? const Color(0xFF2563EB) : const Color(0xFFBFDBFE),
+            Icons.hotel_outlined,
+          ),
+          BookingStatus.reserved => (
+            dark ? const Color(0xFFFDE68A) : const Color(0xFF92400E),
+            dark ? const Color(0xFF452205) : const Color(0xFFFEF3C7),
+            dark ? const Color(0xFFD97706) : const Color(0xFFFDE68A),
+            Icons.event_available_outlined,
+          ),
+          BookingStatus.checkedOut => (
+            dark ? const Color(0xFFCBD5E1) : const Color(0xFF334155),
+            dark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+            dark ? const Color(0xFF475569) : const Color(0xFFCBD5E1),
+            Icons.done_all_rounded,
+          ),
+          BookingStatus.cancelled => (
+            dark ? const Color(0xFFFCA5A5) : const Color(0xFF991B1B),
+            dark ? const Color(0xFF3B181B) : const Color(0xFFFEE2E2),
+            dark ? const Color(0xFF991B1B) : const Color(0xFFFCA5A5),
+            Icons.event_busy_outlined,
+          ),
+        };
+
+    return Material(
+      color: scheme.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(color: scheme.outlineVariant),
@@ -434,80 +464,237 @@ class _BookingsScreenState extends State<BookingsScreen> {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () => _open(booking),
+        borderRadius: BorderRadius.circular(16),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Header Row: Status icon avatar + Guest name & Phone + Status badge + Chevron
               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: Text(
-                      room != null
-                          ? 'Room ${room.number} • ${room.type}'
-                          : 'Room ${booking.roomId}',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: statusBg,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: statusBorder, width: 1.5),
+                    ),
+                    child: Center(
+                      child: Icon(statusIcon, size: 20, color: statusColor),
                     ),
                   ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                primaryGuest?.name ??
+                                    'Guest ${booking.primaryGuestId}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                            if (booking.guestIds.length > 1) ...[
+                              const SizedBox(width: 6),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 1.5,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: scheme.surfaceContainerHighest
+                                      .withAlpha(dark ? 120 : 180),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  '+${booking.guestIds.length - 1}',
+                                  style: TextStyle(
+                                    fontSize: 10.5,
+                                    fontWeight: FontWeight.w700,
+                                    color: scheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                        if (primaryGuest != null &&
+                            primaryGuest.phone.isNotEmpty) ...[
+                          const SizedBox(height: 2),
+                          Text(
+                            formatPhone(primaryGuest.phone),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: scheme.onSurfaceVariant,
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                   BookingStatusBadge(status: booking.status),
+                  const SizedBox(width: 4),
+                  Icon(
+                    Icons.chevron_right,
+                    color: scheme.onSurfaceVariant.withAlpha(140),
+                    size: 18,
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
+              const Divider(height: 1),
+              const SizedBox(height: 10),
+
+              // Room Details Row (Full Width - No Truncation)
               Row(
                 children: [
                   Icon(
-                    Icons.person_outline,
-                    size: 18,
-                    color: scheme.onSurfaceVariant,
+                    Icons.meeting_room_outlined,
+                    size: 15,
+                    color: scheme.primary,
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      primaryGuest != null
-                          ? '${primaryGuest.name} ${booking.guestIds.length > 1 ? '(+${booking.guestIds.length - 1} more)' : ''}'
-                          : 'Guest ID: ${booking.primaryGuestId}',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                  const SizedBox(width: 7),
+                  Text(
+                    room != null
+                        ? 'Room ${room.number}'
+                        : 'Room ${booking.roomId}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13.5,
+                      color: scheme.onSurface,
                     ),
                   ),
-                  if (primaryGuest != null)
-                    Text(
-                      formatPhone(primaryGuest.phone),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: scheme.onSurfaceVariant,
+                  if (room != null && room.type.isNotEmpty) ...[
+                    Expanded(
+                      child: Text(
+                        '  •  ${room.type}',
+                        style: TextStyle(
+                          color: scheme.onSurfaceVariant,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
+                  ],
                 ],
               ),
               const SizedBox(height: 8),
+
+              // Stay Dates & Duration Row (Full Width - No Truncation)
               Row(
                 children: [
                   Icon(
                     Icons.calendar_today_outlined,
-                    size: 18,
+                    size: 14,
                     color: scheme.onSurfaceVariant,
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 7),
                   Expanded(
-                    child: Text(
-                      formatStayDates(
-                        booking.arrivalDate,
-                        booking.departureDate,
-                      ),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            '${booking.arrivalDate}  →  ${booking.departureDate}',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: scheme.onSurface,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 7,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: scheme.surfaceContainerHighest.withAlpha(
+                              dark ? 120 : 160,
+                            ),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Text(
+                            nights == 1 ? '1 night' : '$nights nights',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: scheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Text(
-                    formatPkr(totalCost),
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: scheme.onSurface,
-                    ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Divider(height: 1),
+              const SizedBox(height: 10),
+
+              // Financials Row: Rate Breakdown & Total Cost
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.payments_outlined,
+                        size: 14,
+                        color: scheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        '${formatPkr(booking.nightlyRateMinorSnapshot)} / night',
+                        style: TextStyle(
+                          color: scheme.onSurfaceVariant,
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Total: ',
+                        style: TextStyle(
+                          color: scheme.onSurfaceVariant,
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        formatPkr(totalCost),
+                        style: TextStyle(
+                          color: scheme.onSurface,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
