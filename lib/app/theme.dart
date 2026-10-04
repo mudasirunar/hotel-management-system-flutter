@@ -25,10 +25,10 @@ abstract final class HotelTheme {
           onSecondary: dark ? const Color(0xFF103C2C) : Colors.white,
           secondaryContainer: dark
               ? const Color(0xFF294C3D)
-              : const Color(0xFFE4F2E9),
+              : const Color(0xFFCCEBD9),
           onSecondaryContainer: dark
               ? const Color(0xFFCFF5DF)
-              : const Color(0xFF204E3A),
+              : const Color(0xFF136143),
           surface: dark ? const Color(0xFF24362F) : const Color(0xFFDFF2E7),
           surfaceDim: dark ? const Color(0xFF141F1B) : const Color(0xFFD4E8DC),
           surfaceBright: dark

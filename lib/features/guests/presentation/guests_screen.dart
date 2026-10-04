@@ -177,7 +177,7 @@ class _GuestsScreenState extends State<GuestsScreen> {
                               ),
                             ),
                             const SizedBox(height: 24),
-                            OutlinedButton(
+                            FilledButton.tonal(
                               onPressed: firstUse
                                   ? _add
                                   : () => setState(_search.clear),

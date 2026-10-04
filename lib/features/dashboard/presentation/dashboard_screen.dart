@@ -326,8 +326,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       _MetricData(
         title: 'Total Rooms',
         value: metrics.totalRooms.toString(),
-        icon: Icons.meeting_room_outlined,
-        color: scheme.primary,
+        icon: Icons.apartment_outlined,
+        color: dark ? const Color(0xFF818CF8) : const Color(0xFF4F46E5),
         onTap: widget.onNavigate != null
             ? () => widget.onNavigate!(tab: 1, roomFilter: null)
             : null,
@@ -335,7 +335,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       _MetricData(
         title: 'Available Rooms',
         value: metrics.availableRooms.toString(),
-        icon: Icons.check_circle_outline,
+        icon: Icons.key_outlined,
         color: dark ? const Color(0xFF34D399) : const Color(0xFF007F5F),
         onTap: widget.onNavigate != null
             ? () => widget.onNavigate!(tab: 1, roomFilter: RoomStatus.available)
@@ -345,7 +345,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: 'Occupied Rooms',
         value: metrics.occupiedRooms.toString(),
         icon: Icons.hotel_outlined,
-        color: dark ? const Color(0xFFF3CD90) : const Color(0xFFB45309),
+        color: dark ? const Color(0xFFFBBF24) : const Color(0xFFD97706),
         onTap: widget.onNavigate != null
             ? () => widget.onNavigate!(tab: 1, roomFilter: RoomStatus.occupied)
             : null,
@@ -354,7 +354,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: 'Total Guests',
         value: metrics.totalGuests.toString(),
         icon: Icons.people_outline,
-        color: dark ? const Color(0xFF93C5FD) : const Color(0xFF2563EB),
+        color: dark ? const Color(0xFF38BDF8) : const Color(0xFF0284C7),
         onTap: widget.onNavigate != null
             ? () => widget.onNavigate!(tab: 2)
             : null,
@@ -363,7 +363,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: 'Active Bookings',
         value: metrics.activeBookings.toString(),
         icon: Icons.calendar_today_outlined,
-        color: dark ? const Color(0xFFA78BFA) : const Color(0xFF7C3AED),
+        color: dark ? const Color(0xFFC084FC) : const Color(0xFF9333EA),
         onTap: widget.onNavigate != null
             ? () => widget.onNavigate!(tab: 3, bookingFilter: null)
             : null,

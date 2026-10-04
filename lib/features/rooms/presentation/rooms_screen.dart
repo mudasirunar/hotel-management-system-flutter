@@ -406,7 +406,7 @@ class _RoomEmpty extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        OutlinedButton(
+        FilledButton.tonal(
           onPressed: onAction,
           child: Text(
             firstUse ? 'Add your first room' : 'Reset search and filters',
