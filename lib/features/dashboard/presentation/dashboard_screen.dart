@@ -346,7 +346,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: 'Occupied Rooms',
         value: metrics.occupiedRooms.toString(),
         icon: Icons.hotel_outlined,
-        color: dark ? const Color(0xFFFBBF24) : const Color(0xFFD97706),
+        color: dark ? const Color(0xFF93C5FD) : const Color(0xFF1D4ED8),
         onTap: widget.onNavigate != null
             ? () => widget.onNavigate!(tab: 1, roomFilter: RoomStatus.occupied)
             : null,
@@ -497,12 +497,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             children: [
               CircleAvatar(
                 radius: 20,
-                backgroundColor: scheme.surfaceContainerHighest,
+                backgroundColor: scheme.primaryContainer,
                 child: Text(
                   room != null ? room.number : '?',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: scheme.primary,
+                    color: scheme.onPrimaryContainer,
                     fontSize: 14,
                   ),
                 ),

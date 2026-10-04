@@ -356,22 +356,22 @@ class _GuestsScreenState extends State<GuestsScreen> {
                                             color: activeBooking.status ==
                                                     BookingStatus.checkedIn
                                                 ? (dark
-                                                    ? const Color(0xFF1B382B)
-                                                    : const Color(0xFFE8F5ED))
+                                                    ? const Color(0xFF1E293B)
+                                                    : const Color(0xFFEFF6FF))
                                                 : (dark
-                                                    ? const Color(0xFF332B1D)
-                                                    : const Color(0xFFFFF7EB)),
+                                                    ? const Color(0xFF452205)
+                                                    : const Color(0xFFFEF3C7)),
                                             borderRadius:
                                                 BorderRadius.circular(8),
                                             border: Border.all(
                                               color: activeBooking.status ==
                                                       BookingStatus.checkedIn
                                                   ? (dark
-                                                      ? const Color(0xFF2C5642)
-                                                      : const Color(0xFFBBE5CC))
+                                                      ? const Color(0xFF2563EB)
+                                                      : const Color(0xFFBFDBFE))
                                                   : (dark
-                                                      ? const Color(0xFF53432B)
-                                                      : const Color(0xFFFFE3B3)),
+                                                      ? const Color(0xFFD97706)
+                                                      : const Color(0xFFFDE68A)),
                                               width: 1,
                                             ),
                                           ),
@@ -387,11 +387,11 @@ class _GuestsScreenState extends State<GuestsScreen> {
                                                 color: activeBooking.status ==
                                                         BookingStatus.checkedIn
                                                     ? (dark
-                                                        ? const Color(0xFF9FDCBC)
-                                                        : const Color(0xFF246344))
+                                                        ? const Color(0xFF93C5FD)
+                                                        : const Color(0xFF1E3A8A))
                                                     : (dark
-                                                        ? const Color(0xFFF3CD90)
-                                                        : const Color(0xFF78500E)),
+                                                        ? const Color(0xFFFDE68A)
+                                                        : const Color(0xFF92400E)),
                                               ),
                                               const SizedBox(width: 6),
                                               Expanded(
@@ -407,17 +407,17 @@ class _GuestsScreenState extends State<GuestsScreen> {
                                                             BookingStatus.checkedIn
                                                         ? (dark
                                                             ? const Color(
-                                                                0xFF9FDCBC,
-                                                              )
+                                                                0xFF93C5FD,
+                                                             )
                                                             : const Color(
-                                                                0xFF246344,
+                                                                0xFF1E3A8A,
                                                               ))
                                                         : (dark
                                                             ? const Color(
-                                                                0xFFF3CD90,
+                                                                0xFFFDE68A,
                                                               )
                                                             : const Color(
-                                                                0xFF78500E,
+                                                                0xFF92400E,
                                                               )),
                                                   ),
                                                   maxLines: 1,

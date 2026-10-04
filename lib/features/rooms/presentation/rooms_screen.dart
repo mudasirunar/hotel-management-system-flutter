@@ -380,7 +380,7 @@ class _RoomTile extends StatelessWidget {
       color: scheme.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: scheme.outlineVariant.withAlpha(120)),
+        side: BorderSide(color: scheme.outlineVariant),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -399,16 +399,30 @@ class _RoomTile extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: isOccupied
                           ? (dark
-                              ? const Color(0xFF443725)
-                              : const Color(0xFFFFF1D9))
+                              ? const Color(0xFF1E293B)
+                              : const Color(0xFFEFF6FF))
                           : (isReserved
                               ? (dark
-                                  ? const Color(0xFF1E293B)
-                                  : const Color(0xFFEFF6FF))
+                                  ? const Color(0xFF452205)
+                                  : const Color(0xFFFEF3C7))
                               : (dark
-                                  ? const Color(0xFF253E35)
-                                  : const Color(0xFFE8F5ED))),
+                                  ? const Color(0xFF064E3B)
+                                  : const Color(0xFFECFDF5))),
                       shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isOccupied
+                            ? (dark
+                                ? const Color(0xFF2563EB)
+                                : const Color(0xFFBFDBFE))
+                            : (isReserved
+                                ? (dark
+                                    ? const Color(0xFFD97706)
+                                    : const Color(0xFFFDE68A))
+                                : (dark
+                                    ? const Color(0xFF059669)
+                                    : const Color(0xFFA7F3D0))),
+                        width: 1.5,
+                      ),
                     ),
                     child: Center(
                       child: Icon(
@@ -420,15 +434,15 @@ class _RoomTile extends StatelessWidget {
                         size: 22,
                         color: isOccupied
                             ? (dark
-                                ? const Color(0xFFF3CD90)
-                                : const Color(0xFF78500E))
+                                ? const Color(0xFF93C5FD)
+                                : const Color(0xFF1E3A8A))
                             : (isReserved
                                 ? (dark
-                                    ? const Color(0xFF93C5FD)
-                                    : const Color(0xFF1E40AF))
+                                    ? const Color(0xFFFDE68A)
+                                    : const Color(0xFF92400E))
                                 : (dark
-                                    ? const Color(0xFF9FDCBC)
-                                    : const Color(0xFF246344))),
+                                    ? const Color(0xFFA7F3D0)
+                                    : const Color(0xFF065F46))),
                       ),
                     ),
                   ),
@@ -488,7 +502,7 @@ class _RoomTile extends StatelessWidget {
                         Icon(
                           Icons.payments_outlined,
                           size: 15,
-                          color: scheme.primary,
+                          color: scheme.onSurfaceVariant,
                         ),
                         const SizedBox(width: 6),
                         Flexible(
@@ -497,7 +511,7 @@ class _RoomTile extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              color: scheme.primary,
+                              color: scheme.onSurface,
                               fontWeight: FontWeight.bold,
                               fontSize: 13,
                             ),
@@ -553,8 +567,11 @@ class _RoomTile extends StatelessWidget {
                       : null;
                   final bannerDark = dark;
                   final primaryColor = bannerDark
-                      ? const Color(0xFFF3CD90)
-                      : const Color(0xFF78500E);
+                      ? const Color(0xFF93C5FD)
+                      : const Color(0xFF1E3A8A);
+                  final subtitleColor = bannerDark
+                      ? const Color(0xFF93C5FD).withAlpha(200)
+                      : const Color(0xFF1D4ED8);
                   return Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10,
@@ -562,13 +579,14 @@ class _RoomTile extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: bannerDark
-                          ? const Color(0xFF332B1D)
-                          : const Color(0xFFFFF7EB),
+                          ? const Color(0xFF1E293B)
+                          : const Color(0xFFEFF6FF),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         color: bannerDark
-                            ? const Color(0xFF5A4325)
-                            : const Color(0xFFFBE8D3),
+                            ? const Color(0xFF2563EB)
+                            : const Color(0xFFBFDBFE),
+                        width: 1,
                       ),
                     ),
                     child: Column(
@@ -598,7 +616,7 @@ class _RoomTile extends StatelessWidget {
                             Icon(
                               Icons.calendar_today_outlined,
                               size: 13,
-                              color: primaryColor.withAlpha(200),
+                              color: subtitleColor,
                             ),
                             const SizedBox(width: 6),
                             Expanded(
@@ -611,20 +629,21 @@ class _RoomTile extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: primaryColor,
+                                  fontWeight: FontWeight.w500,
+                                  color: subtitleColor,
                                 ),
                               ),
                             ),
                           ],
                         ),
                         if (nextReservedBooking != null) ...[
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 5),
                           Row(
                             children: [
                               Icon(
                                 Icons.event_outlined,
                                 size: 13,
-                                color: scheme.primary,
+                                color: subtitleColor,
                               ),
                               const SizedBox(width: 6),
                               Expanded(
@@ -635,7 +654,7 @@ class _RoomTile extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 11.5,
                                     fontWeight: FontWeight.w600,
-                                    color: scheme.primary,
+                                    color: subtitleColor,
                                   ),
                                 ),
                               ),
@@ -655,8 +674,11 @@ class _RoomTile extends StatelessWidget {
                       : null;
                   final bannerDark = dark;
                   final primaryColor = bannerDark
-                      ? const Color(0xFF93C5FD)
-                      : const Color(0xFF1E40AF);
+                      ? const Color(0xFFFDE68A)
+                      : const Color(0xFF92400E);
+                  final subtitleColor = bannerDark
+                      ? const Color(0xFFFDE68A).withAlpha(200)
+                      : const Color(0xFFB45309);
                   return Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10,
@@ -664,13 +686,14 @@ class _RoomTile extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: bannerDark
-                          ? const Color(0xFF1E293B)
-                          : const Color(0xFFEFF6FF),
+                          ? const Color(0xFF452205)
+                          : const Color(0xFFFEF3C7),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         color: bannerDark
-                            ? const Color(0xFF334155)
-                            : const Color(0xFFBFDBFE),
+                            ? const Color(0xFFD97706)
+                            : const Color(0xFFFDE68A),
+                        width: 1,
                       ),
                     ),
                     child: Column(
@@ -704,7 +727,7 @@ class _RoomTile extends StatelessWidget {
                             Icon(
                               Icons.calendar_today_outlined,
                               size: 13,
-                              color: primaryColor.withAlpha(200),
+                              color: subtitleColor,
                             ),
                             const SizedBox(width: 6),
                             Expanded(
@@ -717,7 +740,8 @@ class _RoomTile extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: primaryColor,
+                                  fontWeight: FontWeight.w500,
+                                  color: subtitleColor,
                                 ),
                               ),
                             ),
@@ -735,13 +759,14 @@ class _RoomTile extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: dark
-                        ? const Color(0xFF1B382B)
-                        : const Color(0xFFE8F5ED),
+                        ? const Color(0xFF064E3B)
+                        : const Color(0xFFECFDF5),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: dark
-                          ? const Color(0xFF2C5642)
-                          : const Color(0xFFC3E6D2),
+                          ? const Color(0xFF059669)
+                          : const Color(0xFFA7F3D0),
+                      width: 1,
                     ),
                   ),
                   child: Row(
@@ -750,8 +775,8 @@ class _RoomTile extends StatelessWidget {
                         Icons.check_circle_outline,
                         size: 14,
                         color: dark
-                            ? const Color(0xFF9FDCBC)
-                            : const Color(0xFF246344),
+                            ? const Color(0xFFA7F3D0)
+                            : const Color(0xFF065F46),
                       ),
                       const SizedBox(width: 6),
                       Expanded(
@@ -761,10 +786,10 @@ class _RoomTile extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 12,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w700,
                             color: dark
-                                ? const Color(0xFF9FDCBC)
-                                : const Color(0xFF246344),
+                                ? const Color(0xFFA7F3D0)
+                                : const Color(0xFF065F46),
                           ),
                         ),
                       ),

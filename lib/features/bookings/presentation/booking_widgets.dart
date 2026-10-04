@@ -18,22 +18,26 @@ class BookingStatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
-    final (textColor, bgColor) = switch (status) {
+    final (textColor, bgColor, borderColor) = switch (status) {
       BookingStatus.reserved => (
-        dark ? const Color(0xFFF3CD90) : const Color(0xFF78500E),
-        dark ? const Color(0xFF443725) : const Color(0xFFFFF1D9),
+        dark ? const Color(0xFFFDE68A) : const Color(0xFF92400E),
+        dark ? const Color(0xFF452205) : const Color(0xFFFEF3C7),
+        dark ? const Color(0xFFD97706) : const Color(0xFFFDE68A),
       ),
       BookingStatus.checkedIn => (
-        dark ? const Color(0xFF9FDCBC) : const Color(0xFF246344),
-        dark ? const Color(0xFF253E35) : const Color(0xFFE8F5ED),
+        dark ? const Color(0xFF93C5FD) : const Color(0xFF1E3A8A),
+        dark ? const Color(0xFF1E293B) : const Color(0xFFEFF6FF),
+        dark ? const Color(0xFF2563EB) : const Color(0xFFBFDBFE),
       ),
       BookingStatus.checkedOut => (
-        dark ? const Color(0xFFCBD5E1) : const Color(0xFF475569),
+        dark ? const Color(0xFFCBD5E1) : const Color(0xFF334155),
         dark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+        dark ? const Color(0xFF475569) : const Color(0xFFCBD5E1),
       ),
       BookingStatus.cancelled => (
         dark ? const Color(0xFFFCA5A5) : const Color(0xFF991B1B),
-        dark ? const Color(0xFF451A1A) : const Color(0xFFFEE2E2),
+        dark ? const Color(0xFF450A0A) : const Color(0xFFFEF2F2),
+        dark ? const Color(0xFFB91C1C) : const Color(0xFFFECACA),
       ),
     };
 
@@ -42,11 +46,12 @@ class BookingStatusBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: borderColor, width: 1),
       ),
       child: Text(
         bookingStatusLabel(status),
         style: Theme.of(context).textTheme.labelLarge
-            ?.copyWith(color: textColor, fontWeight: FontWeight.w600),
+            ?.copyWith(color: textColor, fontWeight: FontWeight.w700),
       ),
     );
   }

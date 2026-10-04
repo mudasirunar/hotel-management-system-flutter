@@ -506,7 +506,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     formatPkr(totalCost),
                     style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: scheme.primary,
+                      color: scheme.onSurface,
                     ),
                   ),
                 ],
