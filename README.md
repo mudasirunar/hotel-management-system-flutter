@@ -15,28 +15,28 @@ A mobile workspace for managing rooms, guests, reservations, and daily hotel ope
 
 Hotel Management System is a Flutter application designed to help hotel staff organize room inventory, maintain guest records, manage reservations, and handle arrivals and departures. The planned experience supports offline use and adapts to both phones and tablets.
 
-> **Development status:** Core data models, validation, booking rules, local persistence, and startup recovery are implemented. The app currently opens a minimal workspace; the management screens below are still planned.
+## Product Scope
 
-## Planned Management Experience
+The project is being developed around the following capabilities:
 
 | Area | Capabilities |
 | --- | --- |
 | Dashboard | Total rooms, available and occupied rooms, guest count, and active bookings |
-| Rooms | Add, edit, and delete rooms; manage room numbers, types, nightly rates, and occupancy |
+| Rooms | Add, view, edit, and safely delete rooms; nightly prices in PKR; current occupancy |
 | Guests | Manage names, contact details, CNIC, and addresses |
 | Reservations | Select dates, assign rooms and guests, and check room availability |
 | Check-in / Check-out | Record arrivals and departures with automatic occupancy updates |
-| Search & Filters | Find rooms and guests, and filter rooms by status |
-| Adaptive Layouts | A consistent interface for Android/iOS phones and tablets |
+| Search & Filters | Search rooms and guests, and filter rooms by occupancy |
+| Appearance | System, Light, and Dark themes with a locally saved preference |
+| Adaptive Layouts | Comfortable layouts for Android/iOS phones and tablets |
 
-## Implemented Foundation
+## Architecture
 
-- Immutable room, guest, and booking records with calendar dates and integer monetary values.
-- Shared validation, reservation conflict checks, occupancy transitions, and safe deletion rules.
-- Local persistence using [Hive Community Edition](https://pub.dev/packages/hive_ce), with a versioned snapshot and validation of stored relationships.
-- Serialized saves that publish state after storage succeeds, plus startup loading and retry states.
+The application separates feature screens, application state, business rules, and local storage. Shared validation protects record relationships, prevents conflicting reservations, and preserves booking history. Room occupancy follows check-in and check-out activity.
 
-The current store keeps a complete snapshot in the app's application-support directory. It is designed for a modest, single-device dataset and is not encrypted.
+Local persistence uses [Hive Community Edition](https://pub.dev/packages/hive_ce) with a versioned snapshot. Saves complete before updated records appear in the interface. Appearance preferences are stored separately from hotel records.
+
+Storage is designed for a modest, single-device dataset and is not encrypted.
 
 ## Getting Started
 
@@ -89,6 +89,8 @@ Release signing must be configured before distributing the app. The Android scaf
 lib/
 ├── main.dart                 # Application entry point
 ├── app/                      # App composition and startup recovery
+├── features/                 # Feature screens and presentation
+├── shared/                   # Shared formatting and UI helpers
 ├── application/              # State controller and serialized mutations
 ├── domain/
 │   ├── models/               # Rooms, guests, bookings, and calendar dates
@@ -104,7 +106,7 @@ pubspec.lock                  # Resolved dependency versions
 analysis_options.yaml         # Dart analysis rules
 ```
 
-Business rules and persistence are separate from the interface. Feature screens will use the shared application controller as they are introduced.
+Business rules and persistence are separate from the interface. Feature screens use the shared application controller; appearance preferences have a separate controller and local store.
 
 ## App Identity
 
@@ -125,12 +127,10 @@ flutter analyze
 flutter test
 ```
 
-**Verified:** static analysis passes and all 65 automated tests pass, including real Hive file writes/reopenings, corrupt-data recovery behavior, booking rules, save failures, and startup UI states.
-
 The native storage smoke test is available for an Android emulator/device or iOS simulator/device:
 
 ```sh
 flutter test integration_test/storage_smoke_test.dart -d <device-id>
 ```
 
-Native build and device execution remain pending verification. The file-backed storage tests run on the development host; they do not replace the native smoke test.
+Host tests and native smoke tests cover different environments. Validate core workflows and persistence on the target device before distributing a build.
