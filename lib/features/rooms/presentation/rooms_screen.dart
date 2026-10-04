@@ -191,7 +191,41 @@ class _RoomsScreenState extends State<RoomsScreen> {
                                 (RoomStatus.available, 'Available'),
                                 (RoomStatus.occupied, 'Occupied'),
                               ])
-                                FilterChip(
+                                ChoiceChip(
+                                  showCheckmark: false,
+                                  selectedColor: Theme.of(context)
+                                      .colorScheme
+                                      .primary,
+                                  backgroundColor: Theme.of(context)
+                                      .colorScheme
+                                      .surface,
+                                  shape: const StadiumBorder(),
+                                  side: BorderSide(
+                                    color: _filter == item.$1
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context)
+                                              .colorScheme
+                                              .outlineVariant,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 10,
+                                  ),
+                                  labelStyle: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge
+                                      ?.copyWith(
+                                        color: _filter == item.$1
+                                            ? Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary
+                                            : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurfaceVariant,
+                                        fontWeight: _filter == item.$1
+                                            ? FontWeight.w700
+                                            : FontWeight.w500,
+                                      ),
                                   label: Text(item.$2),
                                   selected: _filter == item.$1,
                                   onSelected: (_) =>

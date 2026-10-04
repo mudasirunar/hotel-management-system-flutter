@@ -12,14 +12,14 @@ class RoomStatusBadge extends StatelessWidget {
     final dark = Theme.of(context).brightness == Brightness.dark;
     final occupied = status == RoomStatus.occupied;
     final color = occupied
-        ? (dark ? const Color(0xFFF4CA88) : const Color(0xFF84510C))
-        : (dark ? const Color(0xFFA2DABC) : const Color(0xFF286147));
+        ? (dark ? const Color(0xFFF3CD90) : const Color(0xFF78500E))
+        : (dark ? const Color(0xFF9FDCBC) : const Color(0xFF246344));
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: occupied
-            ? (dark ? const Color(0xFF48361D) : const Color(0xFFFFF0D9))
-            : (dark ? const Color(0xFF213E30) : const Color(0xFFE8F3EB)),
+            ? (dark ? const Color(0xFF443725) : const Color(0xFFFFF1D9))
+            : (dark ? const Color(0xFF253E35) : const Color(0xFFE8F5ED)),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(

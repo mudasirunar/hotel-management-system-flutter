@@ -81,16 +81,7 @@ class AppearanceScreen extends StatelessWidget {
                           onTap: controller.saving || controller.loading
                               ? null
                               : () async {
-                                  final saved = await controller.select(
-                                    option.$1,
-                                  );
-                                  if (context.mounted && saved) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Appearance saved.'),
-                                      ),
-                                    );
-                                  }
+                                  await controller.select(option.$1);
                                 },
                         ),
                       ),
