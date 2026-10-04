@@ -2,33 +2,66 @@ import 'package:flutter/material.dart';
 
 import '../application/hotel_controller.dart';
 import '../application/theme_controller.dart';
+import '../domain/models/booking.dart';
+import '../domain/models/room.dart';
 import '../features/bookings/presentation/bookings_screen.dart';
+import '../features/dashboard/presentation/dashboard_screen.dart';
 import '../features/guests/presentation/guests_screen.dart';
 import '../features/rooms/presentation/rooms_screen.dart';
 import '../shared/widgets/hotel_bottom_bar.dart';
 
-/// Only completed destinations are exposed. IndexedStack preserves each list's
+/// All primary destinations are exposed. IndexedStack preserves each list's
 /// search, filters, and scroll position while moving between the sections.
 class HotelWorkspace extends StatefulWidget {
   const HotelWorkspace({
     super.key,
     required this.controller,
     required this.themeController,
+    this.initialIndex = 0,
   });
 
   final HotelController controller;
   final ThemeController themeController;
+  final int initialIndex;
 
   @override
   State<HotelWorkspace> createState() => _HotelWorkspaceState();
 }
 
 class _HotelWorkspaceState extends State<HotelWorkspace> {
-  int _selected = 0;
+  late int _selected;
+  RoomStatus? _roomFilter;
+  int _roomFilterKey = 0;
+  BookingStatus? _bookingFilter;
+  int _bookingFilterKey = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _selected = widget.initialIndex;
+  }
 
   void _select(int index) {
     FocusManager.instance.primaryFocus?.unfocus();
     setState(() => _selected = index);
+  }
+
+  void _navigateFromDashboard({
+    required int tab,
+    RoomStatus? roomFilter,
+    BookingStatus? bookingFilter,
+  }) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    setState(() {
+      _selected = tab;
+      if (tab == 1) {
+        _roomFilter = roomFilter;
+        _roomFilterKey++;
+      } else if (tab == 3) {
+        _bookingFilter = bookingFilter;
+        _bookingFilterKey++;
+      }
+    });
   }
 
   @override
@@ -39,9 +72,16 @@ class _HotelWorkspaceState extends State<HotelWorkspace> {
         child: IndexedStack(
           index: _selected,
           children: [
+            DashboardScreen(
+              controller: widget.controller,
+              themeController: widget.themeController,
+              onNavigate: _navigateFromDashboard,
+            ),
             RoomsScreen(
               controller: widget.controller,
               themeController: widget.themeController,
+              requestedFilter: _roomFilter,
+              filterRequestKey: _roomFilterKey,
             ),
             GuestsScreen(
               controller: widget.controller,
@@ -50,6 +90,8 @@ class _HotelWorkspaceState extends State<HotelWorkspace> {
             BookingsScreen(
               controller: widget.controller,
               themeController: widget.themeController,
+              requestedFilter: _bookingFilter,
+              filterRequestKey: _bookingFilterKey,
             ),
           ],
         ),
@@ -67,6 +109,11 @@ class _HotelWorkspaceState extends State<HotelWorkspace> {
                 onDestinationSelected: _select,
                 labelType: NavigationRailLabelType.all,
                 destinations: const [
+                  NavigationRailDestination(
+                    icon: Icon(Icons.dashboard_outlined),
+                    selectedIcon: Icon(Icons.dashboard),
+                    label: Text('Dashboard'),
+                  ),
                   NavigationRailDestination(
                     icon: Icon(Icons.bed_outlined),
                     selectedIcon: Icon(Icons.bed),
@@ -96,6 +143,11 @@ class _HotelWorkspaceState extends State<HotelWorkspace> {
                       selectedIndex: _selected,
                       onSelected: _select,
                       destinations: const [
+                        HotelDestination(
+                          icon: Icons.dashboard_outlined,
+                          selectedIcon: Icons.dashboard,
+                          label: 'Dashboard',
+                        ),
                         HotelDestination(
                           icon: Icons.bed_outlined,
                           selectedIcon: Icons.bed,

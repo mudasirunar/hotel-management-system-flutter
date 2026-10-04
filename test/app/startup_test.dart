@@ -35,14 +35,14 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Unable to open your records'), findsOneWidget);
     expect(
-      find.text('Manage your rooms, rates, and current occupancy.'),
+      find.text('Real-time overview of rooms, guests, and stays'),
       findsNothing,
     );
     repository.failRead = false;
     await tester.tap(find.text('Retry'));
     await tester.pumpAndSettle();
     expect(
-      find.text('Manage your rooms, rates, and current occupancy.'),
+      find.text('Real-time overview of rooms, guests, and stays'),
       findsOneWidget,
     );
     expect(find.text('Retry'), findsNothing);

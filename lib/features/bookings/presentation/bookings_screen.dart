@@ -17,10 +17,14 @@ class BookingsScreen extends StatefulWidget {
     super.key,
     required this.controller,
     required this.themeController,
+    this.requestedFilter,
+    this.filterRequestKey = 0,
   });
 
   final HotelController controller;
   final ThemeController themeController;
+  final BookingStatus? requestedFilter;
+  final int filterRequestKey;
 
   @override
   State<BookingsScreen> createState() => _BookingsScreenState();
@@ -29,6 +33,21 @@ class BookingsScreen extends StatefulWidget {
 class _BookingsScreenState extends State<BookingsScreen> {
   final _search = TextEditingController();
   BookingStatus? _filter;
+
+  @override
+  void initState() {
+    super.initState();
+    _filter = widget.requestedFilter;
+  }
+
+  @override
+  void didUpdateWidget(covariant BookingsScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.filterRequestKey != oldWidget.filterRequestKey) {
+      _search.clear();
+      _filter = widget.requestedFilter;
+    }
+  }
 
   @override
   void dispose() {
