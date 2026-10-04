@@ -55,7 +55,7 @@ class _HotelManagementAppState extends State<HotelManagementApp> {
       darkTheme: HotelTheme.dark,
       themeMode: _themeController.mode,
       home: Scaffold(
-        // NavigationBar paints through the bottom inset and protects its own controls.
+        // The bottom bar paints through the inset and protects its own controls.
         body: SafeArea(
           bottom: false,
           child: ListenableBuilder(

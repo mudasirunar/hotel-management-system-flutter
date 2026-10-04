@@ -4,6 +4,7 @@ import '../application/hotel_controller.dart';
 import '../application/theme_controller.dart';
 import '../features/guests/presentation/guests_screen.dart';
 import '../features/rooms/presentation/rooms_screen.dart';
+import '../shared/widgets/hotel_bottom_bar.dart';
 
 /// Only completed destinations are exposed. IndexedStack preserves each list's
 /// search, filters, and scroll position while moving between the two sections.
@@ -81,19 +82,18 @@ class _HotelWorkspaceState extends State<HotelWorkspace> {
                 children: [
                   content,
                   if (!rail)
-                    NavigationBar(
-                      height: 72,
+                    HotelBottomBar(
                       selectedIndex: _selected,
-                      onDestinationSelected: _select,
+                      onSelected: _select,
                       destinations: const [
-                        NavigationDestination(
-                          icon: Icon(Icons.bed_outlined),
-                          selectedIcon: Icon(Icons.bed),
+                        HotelDestination(
+                          icon: Icons.bed_outlined,
+                          selectedIcon: Icons.bed,
                           label: 'Rooms',
                         ),
-                        NavigationDestination(
-                          icon: Icon(Icons.people_outline),
-                          selectedIcon: Icon(Icons.people),
+                        HotelDestination(
+                          icon: Icons.people_outline,
+                          selectedIcon: Icons.people,
                           label: 'Guests',
                         ),
                       ],
