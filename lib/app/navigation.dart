@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../application/hotel_controller.dart';
 import '../application/theme_controller.dart';
+import '../features/bookings/presentation/bookings_screen.dart';
 import '../features/guests/presentation/guests_screen.dart';
 import '../features/rooms/presentation/rooms_screen.dart';
 import '../shared/widgets/hotel_bottom_bar.dart';
 
 /// Only completed destinations are exposed. IndexedStack preserves each list's
-/// search, filters, and scroll position while moving between the two sections.
+/// search, filters, and scroll position while moving between the sections.
 class HotelWorkspace extends StatefulWidget {
   const HotelWorkspace({
     super.key,
@@ -46,6 +47,10 @@ class _HotelWorkspaceState extends State<HotelWorkspace> {
               controller: widget.controller,
               themeController: widget.themeController,
             ),
+            BookingsScreen(
+              controller: widget.controller,
+              themeController: widget.themeController,
+            ),
           ],
         ),
       );
@@ -72,6 +77,11 @@ class _HotelWorkspaceState extends State<HotelWorkspace> {
                     selectedIcon: Icon(Icons.people),
                     label: Text('Guests'),
                   ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.calendar_today_outlined),
+                    selectedIcon: Icon(Icons.calendar_today),
+                    label: Text('Bookings'),
+                  ),
                 ],
               ),
               const VerticalDivider(width: 1),
@@ -95,6 +105,11 @@ class _HotelWorkspaceState extends State<HotelWorkspace> {
                           icon: Icons.people_outline,
                           selectedIcon: Icons.people,
                           label: 'Guests',
+                        ),
+                        HotelDestination(
+                          icon: Icons.calendar_today_outlined,
+                          selectedIcon: Icons.calendar_today,
+                          label: 'Bookings',
                         ),
                       ],
                     ),
