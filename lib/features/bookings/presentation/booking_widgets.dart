@@ -36,8 +36,8 @@ class BookingStatusBadge extends StatelessWidget {
       ),
       BookingStatus.cancelled => (
         dark ? const Color(0xFFFCA5A5) : const Color(0xFF991B1B),
-        dark ? const Color(0xFF450A0A) : const Color(0xFFFEF2F2),
-        dark ? const Color(0xFFB91C1C) : const Color(0xFFFECACA),
+        dark ? const Color(0xFF3B181B) : const Color(0xFFFEE2E2),
+        dark ? const Color(0xFF991B1B) : const Color(0xFFFCA5A5),
       ),
     };
 

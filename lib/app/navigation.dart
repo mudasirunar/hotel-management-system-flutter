@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../application/hotel_controller.dart';
 import '../application/theme_controller.dart';
 import '../domain/models/booking.dart';
-import '../domain/models/room.dart';
 import '../features/bookings/presentation/bookings_screen.dart';
 import '../features/dashboard/presentation/dashboard_screen.dart';
 import '../features/guests/presentation/guests_screen.dart';
@@ -30,7 +29,7 @@ class HotelWorkspace extends StatefulWidget {
 
 class _HotelWorkspaceState extends State<HotelWorkspace> {
   late int _selected;
-  RoomStatus? _roomFilter;
+  RoomFilterTab? _roomFilter;
   int _roomFilterKey = 0;
   BookingStatus? _bookingFilter;
   int _bookingFilterKey = 0;
@@ -70,7 +69,7 @@ class _HotelWorkspaceState extends State<HotelWorkspace> {
 
   void _navigateFromDashboard({
     required int tab,
-    RoomStatus? roomFilter,
+    RoomFilterTab? roomFilter,
     BookingStatus? bookingFilter,
   }) {
     FocusManager.instance.primaryFocus?.unfocus();

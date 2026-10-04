@@ -63,10 +63,16 @@ final class HotelState {
         .map((b) => b.roomId)
         .toSet()
         .length;
+    final reserved = bookings
+        .where((b) => b.status == BookingStatus.reserved)
+        .map((b) => b.roomId)
+        .toSet()
+        .length;
     return HotelMetrics(
       totalRooms: rooms.length,
       availableRooms: rooms.length - occupied,
       occupiedRooms: occupied,
+      reservedRooms: reserved,
       totalGuests: guests.length,
       activeBookings: bookings.where((b) => b.isActive).length,
     );
@@ -78,12 +84,14 @@ final class HotelMetrics {
     required this.totalRooms,
     required this.availableRooms,
     required this.occupiedRooms,
+    this.reservedRooms = 0,
     required this.totalGuests,
     required this.activeBookings,
   });
   final int totalRooms;
   final int availableRooms;
   final int occupiedRooms;
+  final int reservedRooms;
   final int totalGuests;
   final int activeBookings;
 }

@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 import '../../../application/hotel_controller.dart';
 import '../../../application/theme_controller.dart';
 import '../../../domain/models/booking.dart';
-import '../../../domain/models/room.dart';
+import '../../../domain/models/hotel_state.dart';
 import '../../bookings/presentation/booking_detail_screen.dart';
 import '../../bookings/presentation/booking_form_screen.dart';
 import '../../bookings/presentation/booking_widgets.dart';
 import '../../guests/presentation/guest_form_screen.dart';
 import '../../rooms/presentation/room_form_screen.dart';
+import '../../rooms/presentation/rooms_screen.dart';
 import '../../settings/presentation/settings_screen.dart';
 
 typedef DashboardNavigationCallback = void Function({
   required int tab,
-  RoomStatus? roomFilter,
+  RoomFilterTab? roomFilter,
   BookingStatus? bookingFilter,
 });
 
@@ -180,6 +181,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           _buildMetricsGrid(
                             context,
                             metrics,
+                            state,
                             isPhone,
                             scheme,
                             dark,
@@ -319,36 +321,71 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget _buildMetricsGrid(
     BuildContext context,
     dynamic metrics,
+    HotelState state,
     bool isPhone,
     ColorScheme scheme,
     bool dark,
   ) {
+    final total = metrics.totalRooms as int;
+    final occ = metrics.occupiedRooms as int;
+    final avail = metrics.availableRooms as int;
+    final reserved = (metrics.reservedRooms as int?) ??
+        state.bookings
+            .where((b) => b.status == BookingStatus.reserved)
+            .map((b) => b.roomId)
+            .toSet()
+            .length;
+    final occRate = total > 0 ? ((occ / total) * 100).round() : 0;
+    final availRate = total > 0 ? ((avail / total) * 100).round() : 0;
+    final resRate = total > 0 ? ((reserved / total) * 100).round() : 0;
+
+    final upcomingCount = state.bookings
+        .where((b) => b.status == BookingStatus.reserved)
+        .length;
+
     final items = [
       _MetricData(
         title: 'Total Rooms',
-        value: metrics.totalRooms.toString(),
+        value: total.toString(),
         icon: Icons.apartment_outlined,
-        color: dark ? const Color(0xFF818CF8) : const Color(0xFF4F46E5),
+        color: dark ? const Color(0xFF818CF8) : const Color(0xFF4338CA),
+        badge: total == 1 ? '1 unit' : '$total units',
+        subtitle: 'Inventory capacity',
         onTap: widget.onNavigate != null
-            ? () => widget.onNavigate!(tab: 1, roomFilter: null)
+            ? () => widget.onNavigate!(tab: 1, roomFilter: RoomFilterTab.all)
             : null,
       ),
       _MetricData(
-        title: 'Available Rooms',
-        value: metrics.availableRooms.toString(),
+        title: 'Available',
+        value: avail.toString(),
         icon: Icons.key_outlined,
-        color: dark ? const Color(0xFF34D399) : const Color(0xFF007F5F),
+        color: dark ? const Color(0xFF34D399) : const Color(0xFF047857),
+        badge: '$availRate% ready',
+        subtitle: 'Ready for check-in',
         onTap: widget.onNavigate != null
-            ? () => widget.onNavigate!(tab: 1, roomFilter: RoomStatus.available)
+            ? () => widget.onNavigate!(tab: 1, roomFilter: RoomFilterTab.available)
             : null,
       ),
       _MetricData(
-        title: 'Occupied Rooms',
-        value: metrics.occupiedRooms.toString(),
+        title: 'Occupied',
+        value: occ.toString(),
         icon: Icons.hotel_outlined,
-        color: dark ? const Color(0xFF93C5FD) : const Color(0xFF1D4ED8),
+        color: dark ? const Color(0xFF60A5FA) : const Color(0xFF1D4ED8),
+        badge: '$occRate% in-house',
+        subtitle: occ == 1 ? '1 in-house stay' : '$occ in-house stays',
         onTap: widget.onNavigate != null
-            ? () => widget.onNavigate!(tab: 1, roomFilter: RoomStatus.occupied)
+            ? () => widget.onNavigate!(tab: 1, roomFilter: RoomFilterTab.occupied)
+            : null,
+      ),
+      _MetricData(
+        title: 'Reserved',
+        value: reserved.toString(),
+        icon: Icons.bookmark_added_outlined,
+        color: dark ? const Color(0xFFFBBF24) : const Color(0xFFB45309),
+        badge: resRate > 0 ? '$resRate% reserved' : '$upcomingCount upcoming',
+        subtitle: upcomingCount == 1 ? '1 upcoming stay' : '$upcomingCount upcoming stays',
+        onTap: widget.onNavigate != null
+            ? () => widget.onNavigate!(tab: 1, roomFilter: RoomFilterTab.reserved)
             : null,
       ),
       _MetricData(
@@ -356,6 +393,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         value: metrics.totalGuests.toString(),
         icon: Icons.people_outline,
         color: dark ? const Color(0xFF38BDF8) : const Color(0xFF0284C7),
+        badge: 'Directory',
+        subtitle: 'Registered profiles',
         onTap: widget.onNavigate != null
             ? () => widget.onNavigate!(tab: 2)
             : null,
@@ -364,99 +403,133 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: 'Active Bookings',
         value: metrics.activeBookings.toString(),
         icon: Icons.calendar_today_outlined,
-        color: dark ? const Color(0xFFC084FC) : const Color(0xFF9333EA),
+        color: dark ? const Color(0xFFC084FC) : const Color(0xFF7E22CE),
+        badge: 'Live stays',
+        subtitle: 'Ongoing & reserved',
         onTap: widget.onNavigate != null
             ? () => widget.onNavigate!(tab: 3, bookingFilter: null)
             : null,
       ),
     ];
 
-    if (isPhone) {
-      return LayoutBuilder(
-        builder: (context, constraints) {
-          final halfWidth = (constraints.maxWidth - 12) / 2;
-          return Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              for (final (index, item) in items.indexed)
-                SizedBox(
-                  width: index == 4 ? constraints.maxWidth : halfWidth,
-                  child: _metricCard(context, item),
-                ),
-            ],
-          );
-        },
-      );
-    }
-
     return LayoutBuilder(
-      builder: (context, constraints) => Row(
-        children: [
-          for (final item in items)
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: _metricCard(context, item),
+      builder: (context, constraints) {
+        final crossCount = constraints.maxWidth < 650 ? 2 : 3;
+        const spacing = 12.0;
+        final itemWidth =
+            (constraints.maxWidth - (spacing * (crossCount - 1))) / crossCount;
+
+        return Wrap(
+          spacing: spacing,
+          runSpacing: spacing,
+          children: [
+            for (final item in items)
+              SizedBox(
+                width: itemWidth,
+                child: _metricCard(context, item, dark),
               ),
-            ),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 
-  Widget _metricCard(BuildContext context, _MetricData data) {
+  Widget _metricCard(BuildContext context, _MetricData data, bool dark) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     return Card(
       elevation: 0,
+      margin: EdgeInsets.zero,
+      color: scheme.surface,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: scheme.outlineVariant),
+        borderRadius: BorderRadius.circular(14),
+        side: BorderSide(
+          color: scheme.outlineVariant.withAlpha(dark ? 120 : 160),
+        ),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: data.onTap,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(8),
+                    width: 32,
+                    height: 32,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: data.color.withAlpha(24),
-                      borderRadius: BorderRadius.circular(10),
+                      color: data.color.withAlpha(dark ? 40 : 25),
+                      borderRadius: BorderRadius.circular(9),
                     ),
-                    child: Icon(data.icon, size: 22, color: data.color),
+                    child: Icon(data.icon, size: 18, color: data.color),
                   ),
-                  if (data.onTap != null)
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      size: 12,
-                      color: scheme.onSurfaceVariant,
+                  if (data.badge != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 7,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: data.color.withAlpha(dark ? 30 : 18),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        data.badge!,
+                        style: TextStyle(
+                          color: data.color,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.2,
+                        ),
+                      ),
                     ),
                 ],
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 10),
               Text(
                 data.value,
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 24,
+                  height: 1.1,
                   color: data.color,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 4),
               Text(
                 data.title,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: scheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w600,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                  color: scheme.onSurface,
+                  height: 1.2,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
+              if (data.subtitle != null) ...[
+                const SizedBox(height: 2),
+                Text(
+                  data.subtitle!,
+                  style: TextStyle(
+                    color: scheme.onSurfaceVariant,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    height: 1.2,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ],
           ),
         ),
@@ -477,7 +550,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         side: BorderSide(color: scheme.outlineVariant),
       ),
       clipBehavior: Clip.antiAlias,
@@ -492,43 +565,90 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Row(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: scheme.primaryContainer,
-                child: Text(
-                  room != null ? room.number : '?',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: scheme.onPrimaryContainer,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      guest != null ? guest.name : 'Booking ${booking.id}',
-                      style: theme.textTheme.titleSmall?.copyWith(
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 18,
+                    backgroundColor: scheme.primaryContainer,
+                    child: Text(
+                      room != null ? room.number : '?',
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        color: scheme.onPrimaryContainer,
+                        fontSize: 13,
                       ),
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      '${room != null ? room.type : 'Room'} • ${formatStayDates(booking.arrivalDate, booking.departureDate)}',
-                      style: theme.textTheme.bodySmall?.copyWith(
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          guest != null ? guest.name : 'Booking ${booking.id}',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (room != null) ...[
+                          const SizedBox(height: 2),
+                          Text(
+                            room.type,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: scheme.onSurfaceVariant,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  BookingStatusBadge(status: booking.status),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Divider(height: 1),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Icon(
+                    Icons.calendar_today_outlined,
+                    size: 14,
+                    color: scheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      formatStayDates(
+                        booking.arrivalDate,
+                        booking.departureDate,
+                      ),
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w500,
                         color: scheme.onSurfaceVariant,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ],
-                ),
+                  ),
+                  Icon(
+                    Icons.chevron_right,
+                    size: 18,
+                    color: scheme.onSurfaceVariant.withAlpha(150),
+                  ),
+                ],
               ),
-              BookingStatusBadge(status: booking.status),
             ],
           ),
         ),
@@ -543,6 +663,8 @@ class _MetricData {
     required this.value,
     required this.icon,
     required this.color,
+    this.badge,
+    this.subtitle,
     this.onTap,
   });
 
@@ -550,5 +672,7 @@ class _MetricData {
   final String value;
   final IconData icon;
   final Color color;
+  final String? badge;
+  final String? subtitle;
   final VoidCallback? onTap;
 }

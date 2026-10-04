@@ -37,7 +37,7 @@ class RoomsScreen extends StatefulWidget {
 
   final HotelController controller;
   final ThemeController themeController;
-  final RoomStatus? requestedFilter;
+  final RoomFilterTab? requestedFilter;
   final int filterRequestKey;
   final ScrollController? scrollController;
 
@@ -52,7 +52,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
   @override
   void initState() {
     super.initState();
-    _filter = RoomFilterTab.fromRoomStatus(widget.requestedFilter);
+    _filter = widget.requestedFilter ?? RoomFilterTab.all;
   }
 
   @override
@@ -60,7 +60,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
     super.didUpdateWidget(oldWidget);
     if (widget.filterRequestKey != oldWidget.filterRequestKey) {
       _search.clear();
-      _filter = RoomFilterTab.fromRoomStatus(widget.requestedFilter);
+      _filter = widget.requestedFilter ?? RoomFilterTab.all;
     }
   }
 

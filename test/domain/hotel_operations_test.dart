@@ -179,11 +179,13 @@ void main() {
     expect(f.state.metrics.totalGuests, 1);
     expect(f.state.metrics.availableRooms, 1);
     expect(f.state.metrics.occupiedRooms, 0);
+    expect(f.state.metrics.reservedRooms, 1);
     expect(f.state.metrics.activeBookings, 1);
     f.state = f.operations.checkIn(f.state, id);
     expect(f.state.roomStatus(f.roomId), RoomStatus.occupied);
     expect(f.state.metrics.availableRooms, 0);
     expect(f.state.metrics.occupiedRooms, 1);
+    expect(f.state.metrics.reservedRooms, 0);
     expect(f.state.bookings.single.actualCheckInAt, f.now.toUtc());
     expect(
       () => f.operations.checkIn(f.state, id),
@@ -280,10 +282,11 @@ void main() {
         m.totalRooms,
         m.availableRooms,
         m.occupiedRooms,
+        m.reservedRooms,
         m.totalGuests,
         m.activeBookings,
       ],
-      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
     );
   });
 }
