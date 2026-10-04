@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../application/hotel_controller.dart';
 import '../../../domain/hotel_exception.dart';
 import '../../../shared/formatting/money.dart';
+import '../../../shared/widgets/app_notice.dart';
+import '../../bookings/presentation/booking_detail_screen.dart';
+import '../../bookings/presentation/booking_widgets.dart';
 import 'room_form_screen.dart';
 import 'room_widgets.dart';
-import '../../../shared/widgets/app_notice.dart';
 
 class RoomDetailScreen extends StatefulWidget {
   const RoomDetailScreen({
@@ -192,6 +194,113 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
                       if (linked) ...[
                         const AppNotice(
                           message: 'This room has booking history and cannot be deleted. You can still edit its details; existing booked rates stay unchanged.',
+                        ),
+                        const SizedBox(height: 16),
+                        Builder(
+                          builder: (context) {
+                            final roomBookings = state.bookings
+                                .where((b) => b.roomId == room.id)
+                                .toList()
+                                .reversed
+                                .toList();
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Recent Bookings (${roomBookings.length})',
+                                  style: Theme.of(context).textTheme.titleSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                ),
+                                const SizedBox(height: 8),
+                                for (final booking in roomBookings.take(3)) ...[
+                                  Card(
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      side: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outlineVariant,
+                                      ),
+                                    ),
+                                    clipBehavior: Clip.antiAlias,
+                                    child: InkWell(
+                                      onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => BookingDetailScreen(
+                                            controller: widget.controller,
+                                            bookingId: booking.id,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(12),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    state.guests.any(
+                                                          (g) =>
+                                                              g.id ==
+                                                              booking
+                                                                  .primaryGuestId,
+                                                        )
+                                                        ? state
+                                                              .guest(
+                                                                booking
+                                                                    .primaryGuestId,
+                                                              )
+                                                              .name
+                                                        : 'Guest ${booking.primaryGuestId}',
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 2),
+                                                  Text(
+                                                    '${booking.arrivalDate} → ${booking.departureDate}',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurfaceVariant,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            BookingStatusBadge(
+                                              status: booking.status,
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Icon(
+                                              Icons.chevron_right,
+                                              size: 18,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurfaceVariant,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                ],
+                              ],
+                            );
+                          },
                         ),
                         const SizedBox(height: 12),
                       ],

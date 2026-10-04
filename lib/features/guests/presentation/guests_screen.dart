@@ -157,8 +157,7 @@ class _GuestsScreenState extends State<GuestsScreen> {
                             ? EmptyStateView(
                                 icon: Icons.people_outline_rounded,
                                 title: 'Welcome your first guest',
-                                message:
-                                    'Add a guest profile to keep their contact details, CNIC, and booking history organized.',
+                                message: 'Add a guest profile to keep their contact details, CNIC, and booking history organized.',
                                 actionLabel: 'Add your first guest',
                                 actionIcon: Icons.person_add_outlined,
                                 onAction: _add,

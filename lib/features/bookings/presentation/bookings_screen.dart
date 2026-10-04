@@ -257,8 +257,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         child: EmptyStateView(
                           icon: Icons.hotel_outlined,
                           title: 'Set up rooms and guests first',
-                          message:
-                              'Bookings link guests with rooms. Add at least one room and one guest to start taking reservations.',
+                          message: 'Bookings link guests with rooms. Add at least one room and one guest to start taking reservations.',
                           customActions: [
                             if (state.rooms.isEmpty)
                               FilledButton.tonal(
@@ -309,8 +308,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         child: EmptyStateView(
                           icon: Icons.calendar_month_outlined,
                           title: 'No bookings yet',
-                          message:
-                              'Create a reservation to assign rooms, dates, and guests for your hotel.',
+                          message: 'Create a reservation to assign rooms, dates, and guests for your hotel.',
                           actionLabel: 'New Booking',
                           actionIcon: Icons.add,
                           onAction: _add,
@@ -382,8 +380,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
       return EmptyStateView(
         icon: Icons.search_off_rounded,
         title: 'No bookings found for "$query"',
-        message:
-            'No bookings match your search query. Try searching by guest name, phone number, or room number.',
+        message: 'No bookings match your search query. Try searching by guest name, phone number, or room number.',
         actionLabel: 'Clear search',
         actionIcon: Icons.clear_rounded,
         onAction: () => setState(_search.clear),
@@ -405,8 +402,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
     return EmptyStateView(
       icon: Icons.calendar_month_outlined,
       title: 'No matching bookings',
-      message:
-          'Try adjusting your search query or status filter to find what you are looking for.',
+      message: 'Try adjusting your search query or status filter to find what you are looking for.',
       actionLabel: 'Reset filters',
       actionIcon: Icons.refresh_rounded,
       onAction: _reset,

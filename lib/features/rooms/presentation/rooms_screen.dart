@@ -407,8 +407,7 @@ class _RoomEmpty extends StatelessWidget {
       return EmptyStateView(
         icon: Icons.meeting_room_outlined,
         title: 'No rooms added yet',
-        message:
-            'Add your first room to manage room rates, amenities, and guest occupancy.',
+        message: 'Add your first room to manage room rates, amenities, and guest occupancy.',
         actionLabel: 'Add your first room',
         actionIcon: Icons.add,
         onAction: onAdd,
@@ -438,8 +437,7 @@ class _RoomEmpty extends StatelessWidget {
       return EmptyStateView(
         icon: Icons.search_off_rounded,
         title: 'No rooms found for "$trimmed"',
-        message:
-            'No rooms match your search query. Try searching by room number (e.g. 101) or room type.',
+        message: 'No rooms match your search query. Try searching by room number (e.g. 101) or room type.',
         actionLabel: 'Clear search',
         actionIcon: Icons.clear_rounded,
         onAction: onClearSearch,
@@ -461,8 +459,7 @@ class _RoomEmpty extends StatelessWidget {
     return EmptyStateView(
       icon: Icons.meeting_room_outlined,
       title: 'No rooms match',
-      message:
-          'Try adjusting your search query or filters to find what you are looking for.',
+      message: 'Try adjusting your search query or filters to find what you are looking for.',
       actionLabel: 'Reset filters',
       actionIcon: Icons.refresh_rounded,
       onAction: onReset,

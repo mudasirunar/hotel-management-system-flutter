@@ -7,6 +7,8 @@ import '../../../domain/models/stay_date.dart';
 import '../../../shared/formatting/guest_details.dart';
 import '../../../shared/formatting/money.dart';
 import '../../../shared/widgets/app_notice.dart';
+import '../../guests/presentation/guest_detail_screen.dart';
+import '../../rooms/presentation/room_detail_screen.dart';
 import 'booking_widgets.dart';
 
 String formatTimestamp(DateTime dt) {
@@ -252,37 +254,64 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                       borderRadius: BorderRadius.circular(16),
                       side: BorderSide(color: scheme.outlineVariant),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  room != null
-                                      ? 'Room ${room.number} • ${room.type}'
-                                      : 'Room ${booking.roomId}',
-                                  style: theme.textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                    clipBehavior: Clip.antiAlias,
+                    child: InkWell(
+                      onTap: room != null
+                          ? () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => RoomDetailScreen(
+                                  controller: widget.controller,
+                                  roomId: room.id,
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  formatStayDates(
-                                    booking.arrivalDate,
-                                    booking.departureDate,
+                              ),
+                            )
+                          : null,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        room != null
+                                            ? 'Room ${room.number} • ${room.type}'
+                                            : 'Room ${booking.roomId}',
+                                        style: theme.textTheme.titleMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                      if (room != null) ...[
+                                        const SizedBox(width: 4),
+                                        Icon(
+                                          Icons.chevron_right,
+                                          size: 18,
+                                          color: scheme.onSurfaceVariant,
+                                        ),
+                                      ],
+                                    ],
                                   ),
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: scheme.onSurfaceVariant,
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    formatStayDates(
+                                      booking.arrivalDate,
+                                      booking.departureDate,
+                                    ),
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      color: scheme.onSurfaceVariant,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          BookingStatusBadge(status: booking.status),
-                        ],
+                            BookingStatusBadge(status: booking.status),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -611,68 +640,84 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
     }
     final guest = state.guest(guestId);
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CircleAvatar(
-          radius: 18,
-          backgroundColor: isPrimary
-              ? scheme.primaryContainer
-              : scheme.surfaceContainerHighest,
-          child: Icon(
-            Icons.person_outline,
-            size: 20,
-            color: isPrimary ? scheme.primary : scheme.onSurfaceVariant,
+    return InkWell(
+      borderRadius: BorderRadius.circular(10),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => GuestDetailScreen(
+            controller: widget.controller,
+            guestId: guest.id,
           ),
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 18,
+              backgroundColor: isPrimary
+                  ? scheme.primaryContainer
+                  : scheme.surfaceContainerHighest,
+              child: Icon(
+                Icons.person_outline,
+                size: 20,
+                color: isPrimary ? scheme.primary : scheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Flexible(
-                    child: Text(
-                      guest.name,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  if (isPrimary) ...[
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: scheme.primary.withAlpha(30),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        'Primary',
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: scheme.primary,
-                          fontWeight: FontWeight.bold,
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          guest.name,
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
+                      if (isPrimary) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: scheme.primary.withAlpha(30),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            'Primary',
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: scheme.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '${formatPhone(guest.phone)} • ${maskedCnic(guest.cnic)}',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: scheme.onSurfaceVariant,
                     ),
-                  ],
+                  ),
                 ],
               ),
-              const SizedBox(height: 2),
-              Text(
-                '${formatPhone(guest.phone)} • ${maskedCnic(guest.cnic)}',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: scheme.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
+            ),
+            Icon(Icons.chevron_right, size: 20, color: scheme.onSurfaceVariant),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
