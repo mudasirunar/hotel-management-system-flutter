@@ -121,6 +121,11 @@ final class HotelController extends ChangeNotifier {
   Future<void> cancelBooking(String id) =>
       _mutate('booking:$id', (state) => _operations.cancelBooking(state, id));
 
+  Future<void> clearAllData() => _mutate('system:clear', (_) => HotelState());
+
+  Future<void> seedDemoData(HotelState demoState) =>
+      _mutate('system:seed', (_) => demoState);
+
   List<Room> availableRooms(StayDate arrival, StayDate departure) {
     _requireReady();
     final today = _operations.today;

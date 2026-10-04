@@ -96,6 +96,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   MaterialPageRoute(
                                     builder: (_) => SettingsScreen(
                                       controller: widget.themeController,
+                                      hotelController: widget.controller,
                                     ),
                                   ),
                                 ),

@@ -57,8 +57,8 @@ abstract final class HotelTheme {
           outlineVariant: dark
               ? const Color(0xFF496456)
               : const Color(0xFFB7D5C3),
-          error: dark ? const Color(0xFFFFB4AF) : const Color(0xFFB32632),
-          onError: dark ? const Color(0xFF591C22) : Colors.white,
+          error: const Color(0xFFBA1A1A),
+          onError: Colors.white,
           errorContainer: dark
               ? const Color(0xFF4C272E)
               : const Color(0xFFFCE8E9),
