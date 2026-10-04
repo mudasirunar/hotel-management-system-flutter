@@ -4,6 +4,7 @@ import '../../../application/hotel_controller.dart';
 import '../../../application/theme_controller.dart';
 import '../../../domain/models/room.dart';
 import '../../../shared/formatting/money.dart';
+import '../../../shared/widgets/empty_state_view.dart';
 import 'room_detail_screen.dart';
 import 'room_form_screen.dart';
 import 'room_widgets.dart';
@@ -230,28 +231,37 @@ class _RoomsScreenState extends State<RoomsScreen> {
                                 ),
                             ],
                           ),
-                          const SizedBox(height: 24),
-                          Text(
-                            '${rooms.length} ${rooms.length == 1 ? 'room' : 'rooms'}${query.isNotEmpty || _filter != null ? ' matching' : ' in your hotel'}',
-                            style: Theme.of(context).textTheme.labelLarge
-                                ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                ),
-                          ),
-                          const SizedBox(height: 12),
+                          if (rooms.isNotEmpty) ...[
+                            const SizedBox(height: 24),
+                            Text(
+                              '${rooms.length} ${rooms.length == 1 ? 'room' : 'rooms'}${query.isNotEmpty || _filter != null ? ' matching' : ' in your hotel'}',
+                              style: Theme.of(context).textTheme.labelLarge
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                            ),
+                            const SizedBox(height: 12),
+                          ] else ...[
+                            const SizedBox(height: 8),
+                          ],
                         ],
                       ),
                     ),
                   ),
                   if (rooms.isEmpty)
                     SliverPadding(
-                      padding: EdgeInsets.fromLTRB(padding, 16, padding, 48),
+                      padding: EdgeInsets.fromLTRB(padding, 8, padding, 48),
                       sliver: SliverToBoxAdapter(
                         child: _RoomEmpty(
                           firstUse: state.rooms.isEmpty,
-                          onAction: state.rooms.isEmpty ? _add : _reset,
+                          query: query,
+                          filter: _filter,
+                          onAdd: _add,
+                          onReset: _reset,
+                          onClearSearch: () => setState(_search.clear),
+                          onClearFilter: () => setState(() => _filter = null),
                         ),
                       ),
                     )
@@ -373,46 +383,89 @@ class _RoomTile extends StatelessWidget {
 }
 
 class _RoomEmpty extends StatelessWidget {
-  const _RoomEmpty({required this.firstUse, required this.onAction});
+  const _RoomEmpty({
+    required this.firstUse,
+    required this.query,
+    required this.filter,
+    required this.onAdd,
+    required this.onReset,
+    required this.onClearSearch,
+    required this.onClearFilter,
+  });
 
   final bool firstUse;
-  final VoidCallback onAction;
+  final String query;
+  final RoomStatus? filter;
+  final VoidCallback onAdd;
+  final VoidCallback onReset;
+  final VoidCallback onClearSearch;
+  final VoidCallback onClearFilter;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 24),
-    child: Column(
-      children: [
-        Icon(
-          firstUse ? Icons.bed_outlined : Icons.search_off,
-          size: 40,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        const SizedBox(height: 20),
-        Text(
-          firstUse ? 'A place for every room' : 'No rooms match',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        const SizedBox(height: 8),
-        Text(
-          firstUse
-              ? 'Add your first room to start organizing your hotel.'
-              : 'Try another room number or type, or reset your filters.',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-            height: 1.5,
-          ),
-        ),
-        const SizedBox(height: 24),
-        FilledButton.tonal(
-          onPressed: onAction,
-          child: Text(
-            firstUse ? 'Add your first room' : 'Reset search and filters',
-          ),
-        ),
-      ],
-    ),
-  );
+  Widget build(BuildContext context) {
+    if (firstUse) {
+      return EmptyStateView(
+        icon: Icons.meeting_room_outlined,
+        title: 'No rooms added yet',
+        message:
+            'Add your first room to manage room rates, amenities, and guest occupancy.',
+        actionLabel: 'Add your first room',
+        actionIcon: Icons.add,
+        onAction: onAdd,
+      );
+    }
+
+    final trimmed = query.trim();
+    final statusLabel = switch (filter) {
+      RoomStatus.available => 'Available',
+      RoomStatus.occupied => 'Occupied',
+      null => '',
+    };
+
+    if (trimmed.isNotEmpty && filter != null) {
+      return EmptyStateView(
+        icon: Icons.search_off_rounded,
+        title: 'No $statusLabel rooms match "$trimmed"',
+        message:
+            'We couldn\'t find any ${statusLabel.toLowerCase()} rooms matching "$trimmed". Try clearing the filter or checking your search query.',
+        actionLabel: 'Reset search & filter',
+        actionIcon: Icons.refresh_rounded,
+        onAction: onReset,
+      );
+    }
+
+    if (trimmed.isNotEmpty) {
+      return EmptyStateView(
+        icon: Icons.search_off_rounded,
+        title: 'No rooms found for "$trimmed"',
+        message:
+            'No rooms match your search query. Try searching by room number (e.g. 101) or room type.',
+        actionLabel: 'Clear search',
+        actionIcon: Icons.clear_rounded,
+        onAction: onClearSearch,
+      );
+    }
+
+    if (filter != null) {
+      return EmptyStateView(
+        icon: Icons.filter_list_off_rounded,
+        title: 'No $statusLabel rooms',
+        message:
+            'There are currently no rooms marked as ${statusLabel.toLowerCase()} in your hotel.',
+        actionLabel: 'Show all rooms',
+        actionIcon: Icons.view_list_rounded,
+        onAction: onClearFilter,
+      );
+    }
+
+    return EmptyStateView(
+      icon: Icons.meeting_room_outlined,
+      title: 'No rooms match',
+      message:
+          'Try adjusting your search query or filters to find what you are looking for.',
+      actionLabel: 'Reset filters',
+      actionIcon: Icons.refresh_rounded,
+      onAction: onReset,
+    );
+  }
 }

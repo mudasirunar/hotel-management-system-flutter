@@ -5,6 +5,7 @@ import '../../../application/theme_controller.dart';
 import '../../../domain/models/booking.dart';
 import '../../../shared/formatting/guest_details.dart';
 import '../../../shared/formatting/money.dart';
+import '../../../shared/widgets/empty_state_view.dart';
 import '../../guests/presentation/guest_form_screen.dart';
 import '../../rooms/presentation/room_form_screen.dart';
 import 'booking_detail_screen.dart';
@@ -182,7 +183,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                             onSubmitted: (_) =>
                                 FocusManager.instance.primaryFocus?.unfocus(),
                             decoration: InputDecoration(
-                              hintText: 'Search by room, guest, or phone',
+                              hintText: 'Search room, guest, or phone',
                               prefixIcon: const Icon(Icons.search),
                               suffixIcon: _search.text.isEmpty
                                   ? null
@@ -250,154 +251,79 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
                   // Content states
                   if (state.rooms.isEmpty || state.guests.isEmpty)
-                    SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: Padding(
-                        padding: EdgeInsets.all(padding),
-                        child: Center(
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 420),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.hotel_outlined,
-                                  size: 48,
-                                  color: scheme.onSurfaceVariant,
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  'Set up rooms and guests first',
-                                  style: theme.textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  'Bookings link guests with rooms. Add at least one room and one guest to start taking reservations.',
-                                  textAlign: TextAlign.center,
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: scheme.onSurfaceVariant,
+                    SliverPadding(
+                      padding: EdgeInsets.fromLTRB(padding, 8, padding, 48),
+                      sliver: SliverToBoxAdapter(
+                        child: EmptyStateView(
+                          icon: Icons.hotel_outlined,
+                          title: 'Set up rooms and guests first',
+                          message:
+                              'Bookings link guests with rooms. Add at least one room and one guest to start taking reservations.',
+                          customActions: [
+                            if (state.rooms.isEmpty)
+                              FilledButton.tonal(
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => RoomFormScreen(
+                                      controller: widget.controller,
+                                    ),
                                   ),
                                 ),
-                                const SizedBox(height: 24),
-                                Wrap(
-                                  spacing: 12,
-                                  runSpacing: 12,
-                                  alignment: WrapAlignment.center,
+                                child: const Row(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    if (state.rooms.isEmpty)
-                                      FilledButton.tonal(
-                                        onPressed: () => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => RoomFormScreen(
-                                              controller: widget.controller,
-                                            ),
-                                          ),
-                                        ),
-                                        child: const Text('Add Room'),
-                                      ),
-                                    if (state.guests.isEmpty)
-                                      FilledButton.tonal(
-                                        onPressed: () => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => GuestFormScreen(
-                                              controller: widget.controller,
-                                            ),
-                                          ),
-                                        ),
-                                        child: const Text('Add Guest'),
-                                      ),
+                                    Icon(Icons.add, size: 18),
+                                    SizedBox(width: 8),
+                                    Text('Add Room'),
                                   ],
                                 ),
-                              ],
-                            ),
-                          ),
+                              ),
+                            if (state.guests.isEmpty)
+                              FilledButton.tonal(
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => GuestFormScreen(
+                                      controller: widget.controller,
+                                    ),
+                                  ),
+                                ),
+                                child: const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.person_add_outlined, size: 18),
+                                    SizedBox(width: 8),
+                                    Text('Add Guest'),
+                                  ],
+                                ),
+                              ),
+                          ],
                         ),
                       ),
                     )
                   else if (state.bookings.isEmpty)
-                    SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: Padding(
-                        padding: EdgeInsets.all(padding),
-                        child: Center(
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 420),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.calendar_today_outlined,
-                                  size: 48,
-                                  color: scheme.onSurfaceVariant,
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  'No bookings yet',
-                                  style: theme.textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  'Create a reservation to assign rooms, dates, and guests.',
-                                  textAlign: TextAlign.center,
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: scheme.onSurfaceVariant,
-                                  ),
-                                ),
-                                const SizedBox(height: 24),
-                                FilledButton.icon(
-                                  onPressed: _add,
-                                  icon: const Icon(Icons.add, size: 18),
-                                  label: const Text('New Booking'),
-                                ),
-                              ],
-                            ),
-                          ),
+                    SliverPadding(
+                      padding: EdgeInsets.fromLTRB(padding, 8, padding, 48),
+                      sliver: SliverToBoxAdapter(
+                        child: EmptyStateView(
+                          icon: Icons.calendar_month_outlined,
+                          title: 'No bookings yet',
+                          message:
+                              'Create a reservation to assign rooms, dates, and guests for your hotel.',
+                          actionLabel: 'New Booking',
+                          actionIcon: Icons.add,
+                          onAction: _add,
                         ),
                       ),
                     )
                   else if (filteredBookings.isEmpty)
-                    SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: Padding(
-                        padding: EdgeInsets.all(padding),
-                        child: Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.search_off,
-                                size: 48,
-                                color: scheme.onSurfaceVariant,
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'No matching bookings',
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Try changing your search query or status filter.',
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: scheme.onSurfaceVariant,
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              OutlinedButton(
-                                onPressed: _reset,
-                                child: const Text('Reset filters'),
-                              ),
-                            ],
-                          ),
+                    SliverPadding(
+                      padding: EdgeInsets.fromLTRB(padding, 8, padding, 48),
+                      sliver: SliverToBoxAdapter(
+                        child: _buildBookingEmptyState(
+                          query: _search.text.trim(),
+                          filter: _filter,
                         ),
                       ),
                     )
@@ -427,6 +353,65 @@ class _BookingsScreenState extends State<BookingsScreen> {
       );
     },
   );
+
+  Widget _buildBookingEmptyState({
+    required String query,
+    required BookingStatus? filter,
+  }) {
+    final statusLabel = switch (filter) {
+      BookingStatus.reserved => 'Reserved',
+      BookingStatus.checkedIn => 'Checked-in',
+      BookingStatus.checkedOut => 'Checked-out',
+      BookingStatus.cancelled => 'Cancelled',
+      null => '',
+    };
+
+    if (query.isNotEmpty && filter != null) {
+      return EmptyStateView(
+        icon: Icons.search_off_rounded,
+        title: 'No $statusLabel bookings match "$query"',
+        message:
+            'We couldn\'t find any $statusLabel bookings matching "$query". Try clearing the filter or checking your search query.',
+        actionLabel: 'Reset search & filter',
+        actionIcon: Icons.refresh_rounded,
+        onAction: _reset,
+      );
+    }
+
+    if (query.isNotEmpty) {
+      return EmptyStateView(
+        icon: Icons.search_off_rounded,
+        title: 'No bookings found for "$query"',
+        message:
+            'No bookings match your search query. Try searching by guest name, phone number, or room number.',
+        actionLabel: 'Clear search',
+        actionIcon: Icons.clear_rounded,
+        onAction: () => setState(_search.clear),
+      );
+    }
+
+    if (filter != null) {
+      return EmptyStateView(
+        icon: Icons.filter_list_off_rounded,
+        title: 'No $statusLabel bookings',
+        message:
+            'There are currently no bookings with status "$statusLabel" in your records.',
+        actionLabel: 'Show all bookings',
+        actionIcon: Icons.view_list_rounded,
+        onAction: () => setState(() => _filter = null),
+      );
+    }
+
+    return EmptyStateView(
+      icon: Icons.calendar_month_outlined,
+      title: 'No matching bookings',
+      message:
+          'Try adjusting your search query or status filter to find what you are looking for.',
+      actionLabel: 'Reset filters',
+      actionIcon: Icons.refresh_rounded,
+      onAction: _reset,
+    );
+  }
 
   Widget _bookingCard(
     BuildContext context,

@@ -5,6 +5,7 @@ import '../../../application/theme_controller.dart';
 import '../../../domain/models/guest.dart';
 import '../../../domain/services/guest_search.dart';
 import '../../../shared/formatting/guest_details.dart';
+import '../../../shared/widgets/empty_state_view.dart';
 import 'guest_detail_screen.dart';
 import 'guest_form_screen.dart';
 
@@ -133,62 +134,45 @@ class _GuestsScreenState extends State<GuestsScreen> {
                                     ),
                             ),
                           ),
-                          const SizedBox(height: 24),
-                          Text(
-                            '${guests.length} ${guests.length == 1 ? 'guest' : 'guests'}${_search.text.trim().isEmpty ? ' in your records' : ' matching'}',
-                            style: Theme.of(context).textTheme.labelLarge
-                                ?.copyWith(color: scheme.onSurfaceVariant),
-                          ),
-                          const SizedBox(height: 12),
+                          if (guests.isNotEmpty) ...[
+                            const SizedBox(height: 24),
+                            Text(
+                              '${guests.length} ${guests.length == 1 ? 'guest' : 'guests'}${_search.text.trim().isEmpty ? ' in your records' : ' matching'}',
+                              style: Theme.of(context).textTheme.labelLarge
+                                  ?.copyWith(color: scheme.onSurfaceVariant),
+                            ),
+                            const SizedBox(height: 12),
+                          ] else ...[
+                            const SizedBox(height: 8),
+                          ],
                         ],
                       ),
                     ),
                   ),
                   if (guests.isEmpty)
                     SliverPadding(
-                      padding: EdgeInsets.fromLTRB(padding, 40, padding, 48),
+                      padding: EdgeInsets.fromLTRB(padding, 8, padding, 48),
                       sliver: SliverToBoxAdapter(
-                        child: Column(
-                          children: [
-                            Icon(
-                              firstUse
-                                  ? Icons.people_outline
-                                  : Icons.search_off,
-                              size: 40,
-                              color: scheme.primary,
-                            ),
-                            const SizedBox(height: 20),
-                            Text(
-                              firstUse
-                                  ? 'Welcome your first guest'
-                                  : 'No guests match',
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              firstUse
-                                  ? 'Add a guest profile to keep their details organized.'
-                                  : 'Try another name, phone number, or CNIC.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: scheme.onSurfaceVariant,
-                                height: 1.5,
+                        child: firstUse
+                            ? EmptyStateView(
+                                icon: Icons.people_outline_rounded,
+                                title: 'Welcome your first guest',
+                                message:
+                                    'Add a guest profile to keep their contact details, CNIC, and booking history organized.',
+                                actionLabel: 'Add your first guest',
+                                actionIcon: Icons.person_add_outlined,
+                                onAction: _add,
+                              )
+                            : EmptyStateView(
+                                icon: Icons.person_search_outlined,
+                                title:
+                                    'No guests found for "${_search.text.trim()}"',
+                                message:
+                                    'We couldn\'t find any guest profiles matching "${_search.text.trim()}". Check for typos or search by phone or CNIC.',
+                                actionLabel: 'Clear search',
+                                actionIcon: Icons.clear_rounded,
+                                onAction: () => setState(_search.clear),
                               ),
-                            ),
-                            const SizedBox(height: 24),
-                            FilledButton.tonal(
-                              onPressed: firstUse
-                                  ? _add
-                                  : () => setState(_search.clear),
-                              child: Text(
-                                firstUse
-                                    ? 'Add your first guest'
-                                    : 'Clear search',
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
                     )
                   else
