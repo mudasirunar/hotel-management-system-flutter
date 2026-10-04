@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../application/hotel_controller.dart';
 import '../../../application/theme_controller.dart';
-import '../../settings/presentation/appearance_screen.dart';
 import '../../../domain/models/room.dart';
 import '../../../shared/formatting/money.dart';
 import 'room_detail_screen.dart';
@@ -16,12 +15,14 @@ class RoomsScreen extends StatefulWidget {
     required this.themeController,
     this.requestedFilter,
     this.filterRequestKey = 0,
+    this.scrollController,
   });
 
   final HotelController controller;
   final ThemeController themeController;
   final RoomStatus? requestedFilter;
   final int filterRequestKey;
+  final ScrollController? scrollController;
 
   @override
   State<RoomsScreen> createState() => _RoomsScreenState();
@@ -114,12 +115,13 @@ class _RoomsScreenState extends State<RoomsScreen> {
               constraints: const BoxConstraints(maxWidth: 1100),
               child: CustomScrollView(
                 primary: false,
+                controller: widget.scrollController,
                 key: const PageStorageKey('rooms-list'),
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
                 slivers: [
                   SliverPadding(
-                    padding: EdgeInsets.fromLTRB(padding, 24, padding, 0),
+                    padding: EdgeInsets.fromLTRB(padding, 20, padding, 0),
                     sliver: SliverToBoxAdapter(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -128,46 +130,20 @@ class _RoomsScreenState extends State<RoomsScreen> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  'HOTEL MANAGEMENT',
-                                  style: Theme.of(context).textTheme.labelMedium
-                                      ?.copyWith(
-                                        letterSpacing: 1.5,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurfaceVariant,
-                                      ),
+                                  'Rooms',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
                                 ),
-                              ),
-                              IconButton(
-                                tooltip: 'Appearance settings',
-                                icon: const Icon(Icons.brightness_6_outlined),
-                                onPressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => AppearanceScreen(
-                                      controller: widget.themeController,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Wrap(
-                            alignment: WrapAlignment.spaceBetween,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            spacing: 24,
-                            runSpacing: 16,
-                            children: [
-                              Text(
-                                'Rooms',
-                                style: Theme.of(context).textTheme.headlineLarge
-                                    ?.copyWith(fontWeight: FontWeight.w600),
                               ),
                               FilledButton.icon(
                                 onPressed: _add,
-                                icon: const Icon(Icons.add, size: 20),
-                                label: const Text('Add room'),
+                                icon: const Icon(
+                                  Icons.meeting_room_outlined,
+                                  size: 18,
+                                ),
+                                label: const Text('Add Room'),
                               ),
                             ],
                           ),

@@ -35,15 +35,37 @@ class _HotelWorkspaceState extends State<HotelWorkspace> {
   BookingStatus? _bookingFilter;
   int _bookingFilterKey = 0;
 
+  late final List<ScrollController> _tabScrollControllers;
+
   @override
   void initState() {
     super.initState();
     _selected = widget.initialIndex;
+    _tabScrollControllers = List.generate(4, (_) => ScrollController());
+  }
+
+  @override
+  void dispose() {
+    for (final c in _tabScrollControllers) {
+      c.dispose();
+    }
+    super.dispose();
   }
 
   void _select(int index) {
     FocusManager.instance.primaryFocus?.unfocus();
-    setState(() => _selected = index);
+    if (index == _selected) {
+      final controller = _tabScrollControllers[index];
+      if (controller.hasClients && controller.offset > 0) {
+        controller.animateTo(
+          0,
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeOutCubic,
+        );
+      }
+    } else {
+      setState(() => _selected = index);
+    }
   }
 
   void _navigateFromDashboard({
@@ -76,22 +98,26 @@ class _HotelWorkspaceState extends State<HotelWorkspace> {
               controller: widget.controller,
               themeController: widget.themeController,
               onNavigate: _navigateFromDashboard,
+              scrollController: _tabScrollControllers[0],
             ),
             RoomsScreen(
               controller: widget.controller,
               themeController: widget.themeController,
               requestedFilter: _roomFilter,
               filterRequestKey: _roomFilterKey,
+              scrollController: _tabScrollControllers[1],
             ),
             GuestsScreen(
               controller: widget.controller,
               themeController: widget.themeController,
+              scrollController: _tabScrollControllers[2],
             ),
             BookingsScreen(
               controller: widget.controller,
               themeController: widget.themeController,
               requestedFilter: _bookingFilter,
               filterRequestKey: _bookingFilterKey,
+              scrollController: _tabScrollControllers[3],
             ),
           ],
         ),

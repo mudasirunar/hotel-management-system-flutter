@@ -5,7 +5,6 @@ import '../../../application/theme_controller.dart';
 import '../../../domain/models/guest.dart';
 import '../../../domain/services/guest_search.dart';
 import '../../../shared/formatting/guest_details.dart';
-import '../../settings/presentation/appearance_screen.dart';
 import 'guest_detail_screen.dart';
 import 'guest_form_screen.dart';
 
@@ -14,10 +13,12 @@ class GuestsScreen extends StatefulWidget {
     super.key,
     required this.controller,
     required this.themeController,
+    this.scrollController,
   });
 
   final HotelController controller;
   final ThemeController themeController;
+  final ScrollController? scrollController;
 
   @override
   State<GuestsScreen> createState() => _GuestsScreenState();
@@ -75,12 +76,13 @@ class _GuestsScreenState extends State<GuestsScreen> {
               constraints: const BoxConstraints(maxWidth: 1100),
               child: CustomScrollView(
                 primary: false,
+                controller: widget.scrollController,
                 key: const PageStorageKey('guests-list'),
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
                 slivers: [
                   SliverPadding(
-                    padding: EdgeInsets.fromLTRB(padding, 24, padding, 0),
+                    padding: EdgeInsets.fromLTRB(padding, 20, padding, 0),
                     sliver: SliverToBoxAdapter(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -89,47 +91,17 @@ class _GuestsScreenState extends State<GuestsScreen> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  'HOTEL MANAGEMENT',
-                                  style: Theme.of(context).textTheme.labelMedium
-                                      ?.copyWith(
-                                        letterSpacing: 1.5,
-                                        color: scheme.onSurfaceVariant,
-                                      ),
+                                  'Guests',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
                                 ),
-                              ),
-                              IconButton(
-                                tooltip: 'Appearance settings',
-                                icon: const Icon(Icons.brightness_6_outlined),
-                                onPressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => AppearanceScreen(
-                                      controller: widget.themeController,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Wrap(
-                            alignment: WrapAlignment.spaceBetween,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            spacing: 24,
-                            runSpacing: 16,
-                            children: [
-                              Text(
-                                'Guests',
-                                style: Theme.of(context).textTheme.headlineLarge
-                                    ?.copyWith(fontWeight: FontWeight.w600),
                               ),
                               FilledButton.icon(
                                 onPressed: _add,
-                                icon: const Icon(
-                                  Icons.person_add_alt_1_outlined,
-                                  size: 20,
-                                ),
-                                label: const Text('Add guest'),
+                                icon: const Icon(Icons.person_add, size: 18),
+                                label: const Text('Add Guest'),
                               ),
                             ],
                           ),

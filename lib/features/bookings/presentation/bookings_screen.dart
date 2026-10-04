@@ -7,7 +7,6 @@ import '../../../shared/formatting/guest_details.dart';
 import '../../../shared/formatting/money.dart';
 import '../../guests/presentation/guest_form_screen.dart';
 import '../../rooms/presentation/room_form_screen.dart';
-import '../../settings/presentation/appearance_screen.dart';
 import 'booking_detail_screen.dart';
 import 'booking_form_screen.dart';
 import 'booking_widgets.dart';
@@ -19,12 +18,14 @@ class BookingsScreen extends StatefulWidget {
     required this.themeController,
     this.requestedFilter,
     this.filterRequestKey = 0,
+    this.scrollController,
   });
 
   final HotelController controller;
   final ThemeController themeController;
   final BookingStatus? requestedFilter;
   final int filterRequestKey;
+  final ScrollController? scrollController;
 
   @override
   State<BookingsScreen> createState() => _BookingsScreenState();
@@ -132,6 +133,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
               constraints: const BoxConstraints(maxWidth: 1100),
               child: CustomScrollView(
                 primary: false,
+                controller: widget.scrollController,
                 key: const PageStorageKey('bookings-list'),
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
@@ -140,7 +142,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     padding: EdgeInsets.fromLTRB(padding, 20, padding, 0),
                     sliver: SliverToBoxAdapter(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Row(
                             children: [
@@ -151,77 +153,92 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                       ?.copyWith(fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              IconButton(
-                                tooltip: 'Appearance',
-                                icon: const Icon(Icons.palette_outlined),
-                                onPressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => AppearanceScreen(
-                                      controller: widget.themeController,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
                               FilledButton.icon(
                                 onPressed: _add,
-                                icon: const Icon(Icons.add, size: 18),
+                                icon: const Icon(
+                                  Icons.calendar_month_outlined,
+                                  size: 18,
+                                ),
                                 label: const Text('New Booking'),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Manage reservations, stays, and guest check-ins.',
+                            style: TextStyle(
+                              color: scheme.onSurfaceVariant,
+                              height: 1.5,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
 
                           // Search field
                           TextField(
                             controller: _search,
                             onChanged: (_) => setState(() {}),
+                            textInputAction: TextInputAction.search,
+                            autocorrect: false,
+                            onSubmitted: (_) =>
+                                FocusManager.instance.primaryFocus?.unfocus(),
                             decoration: InputDecoration(
-                              hintText: 'Search by room, guest, or phone...',
+                              hintText: 'Search by room, guest, or phone',
                               prefixIcon: const Icon(Icons.search),
-                              suffixIcon: _search.text.isNotEmpty
-                                  ? IconButton(
-                                      icon: const Icon(Icons.clear),
-                                      onPressed: () {
-                                        _search.clear();
-                                        setState(() {});
-                                      },
-                                    )
-                                  : null,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
+                              suffixIcon: _search.text.isEmpty
+                                  ? null
+                                  : IconButton(
+                                      tooltip: 'Clear search',
+                                      icon: const Icon(Icons.close),
+                                      onPressed: () => setState(_search.clear),
+                                    ),
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 16),
 
-                          // Status filters
+                          // Status filters in a horizontal row
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
                               children: [
-                                _filterChip(label: 'All', value: null),
-                                const SizedBox(width: 8),
-                                _filterChip(
-                                  label: 'Reserved',
-                                  value: BookingStatus.reserved,
-                                ),
-                                const SizedBox(width: 8),
-                                _filterChip(
-                                  label: 'Checked In',
-                                  value: BookingStatus.checkedIn,
-                                ),
-                                const SizedBox(width: 8),
-                                _filterChip(
-                                  label: 'Checked Out',
-                                  value: BookingStatus.checkedOut,
-                                ),
-                                const SizedBox(width: 8),
-                                _filterChip(
-                                  label: 'Cancelled',
-                                  value: BookingStatus.cancelled,
-                                ),
+                                for (final (index, item)
+                                    in <(BookingStatus?, String)>[
+                                      (null, 'All'),
+                                      (BookingStatus.reserved, 'Reserved'),
+                                      (BookingStatus.checkedIn, 'Checked In'),
+                                      (BookingStatus.checkedOut, 'Checked Out'),
+                                      (BookingStatus.cancelled, 'Cancelled'),
+                                    ].indexed) ...[
+                                  if (index > 0) const SizedBox(width: 8),
+                                  ChoiceChip(
+                                    showCheckmark: false,
+                                    selectedColor: scheme.primary,
+                                    backgroundColor: scheme.surface,
+                                    shape: const StadiumBorder(),
+                                    side: BorderSide(
+                                      color: _filter == item.$1
+                                          ? scheme.primary
+                                          : scheme.outlineVariant,
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 10,
+                                    ),
+                                    labelStyle: theme.textTheme.labelLarge
+                                        ?.copyWith(
+                                          color: _filter == item.$1
+                                              ? scheme.onPrimary
+                                              : scheme.onSurfaceVariant,
+                                          fontWeight: _filter == item.$1
+                                              ? FontWeight.bold
+                                              : FontWeight.w500,
+                                        ),
+                                    label: Text(item.$2),
+                                    selected: _filter == item.$1,
+                                    onSelected: (_) {
+                                      setState(() => _filter = item.$1);
+                                    },
+                                  ),
+                                ],
                               ],
                             ),
                           ),
@@ -410,30 +427,6 @@ class _BookingsScreenState extends State<BookingsScreen> {
       );
     },
   );
-
-  Widget _filterChip({required String label, required BookingStatus? value}) {
-    final selected = _filter == value;
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-    return ChoiceChip(
-      label: Text(label),
-      selected: selected,
-      showCheckmark: false,
-      onSelected: (_) => setState(() => _filter = value),
-      labelStyle: TextStyle(
-        fontWeight: selected ? FontWeight.bold : FontWeight.w500,
-        color: selected ? scheme.onPrimary : scheme.onSurfaceVariant,
-      ),
-      selectedColor: scheme.primary,
-      backgroundColor: scheme.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: BorderSide(
-          color: selected ? scheme.primary : scheme.outlineVariant,
-        ),
-      ),
-    );
-  }
 
   Widget _bookingCard(
     BuildContext context,

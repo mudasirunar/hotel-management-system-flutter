@@ -9,7 +9,7 @@ import '../../bookings/presentation/booking_form_screen.dart';
 import '../../bookings/presentation/booking_widgets.dart';
 import '../../guests/presentation/guest_form_screen.dart';
 import '../../rooms/presentation/room_form_screen.dart';
-import '../../settings/presentation/appearance_screen.dart';
+import '../../settings/presentation/settings_screen.dart';
 
 typedef DashboardNavigationCallback = void Function({
   required int tab,
@@ -23,25 +23,19 @@ class DashboardScreen extends StatefulWidget {
     required this.controller,
     required this.themeController,
     this.onNavigate,
+    this.scrollController,
   });
 
   final HotelController controller;
   final ThemeController themeController;
   final DashboardNavigationCallback? onNavigate;
+  final ScrollController? scrollController;
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final _actionsScrollController = ScrollController();
-
-  @override
-  void dispose() {
-    _actionsScrollController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: widget.controller,
@@ -75,62 +69,52 @@ class _DashboardScreenState extends State<DashboardScreen> {
               constraints: const BoxConstraints(maxWidth: 1100),
               child: CustomScrollView(
                 primary: false,
+                controller: widget.scrollController,
                 key: const PageStorageKey('dashboard-scroll'),
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
                 slivers: [
                   SliverPadding(
                     padding: EdgeInsets.fromLTRB(padding, 20, padding, 32),
-                    sliver: SliverList(
-                      delegate: SliverChildListDelegate([
-                        // App bar header
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Dashboard',
-                                    style: theme.textTheme.headlineMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'Real-time overview of rooms, guests, and stays',
-                                    style: theme.textTheme.bodyMedium?.copyWith(
-                                      color: scheme.onSurfaceVariant,
-                                    ),
-                                  ),
-                                ],
+                    sliver: SliverToBoxAdapter(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // App bar header
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Dashboard',
+                                  style: theme.textTheme.headlineMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
-                            IconButton(
-                              tooltip: 'Appearance',
-                              icon: const Icon(Icons.palette_outlined),
-                              onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => AppearanceScreen(
-                                    controller: widget.themeController,
+                              IconButton(
+                                tooltip: 'Settings',
+                                icon: const Icon(Icons.settings_outlined),
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => SettingsScreen(
+                                      controller: widget.themeController,
+                                    ),
                                   ),
                                 ),
                               ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Real-time overview of rooms, guests, and stays',
+                            style: TextStyle(
+                              color: scheme.onSurfaceVariant,
+                              height: 1.5,
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
+                          ),
+                          const SizedBox(height: 20),
 
-                        // Quick Actions in horizontal row
-                        ExcludeFocus(
-                          child: SingleChildScrollView(
-                            key: const ValueKey(
-                              'dashboard-quick-actions-scroll',
-                            ),
-                            primary: false,
-                            controller: _actionsScrollController,
+                          // Quick Actions in horizontal row
+                          SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            physics: const ClampingScrollPhysics(),
                             child: Row(
                               children: [
                                 FilledButton.icon(
@@ -142,7 +126,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       ),
                                     ),
                                   ),
-                                  icon: const Icon(Icons.add, size: 18),
+                                  icon: const Icon(
+                                    Icons.calendar_month_outlined,
+                                    size: 18,
+                                  ),
                                   label: const Text('New Booking'),
                                 ),
                                 const SizedBox(width: 8),
@@ -177,146 +164,146 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ],
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 24),
+                          const SizedBox(height: 24),
 
-                        // Section Title: Key Metrics
-                        Text(
-                          'Hotel Metrics',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
+                          // Section Title: Key Metrics
+                          Text(
+                            'Hotel Metrics',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 12),
+                          const SizedBox(height: 12),
 
-                        // Metrics Grid
-                        _buildMetricsGrid(
-                          context,
-                          metrics,
-                          isPhone,
-                          scheme,
-                          dark,
-                        ),
-                        const SizedBox(height: 28),
+                          // Metrics Grid
+                          _buildMetricsGrid(
+                            context,
+                            metrics,
+                            isPhone,
+                            scheme,
+                            dark,
+                          ),
+                          const SizedBox(height: 28),
 
-                        // In-House Stays Section
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'In-House Guests (${inHouseStays.length})',
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            if (widget.onNavigate != null)
-                              TextButton(
-                                onPressed: () => widget.onNavigate!(
-                                  tab: 3,
-                                  bookingFilter: BookingStatus.checkedIn,
-                                ),
-                                child: const Text('View In-House Stays'),
-                              ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        if (inHouseStays.isEmpty)
-                          Card(
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              side: BorderSide(color: scheme.outlineVariant),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(24),
-                              child: Center(
-                                child: Column(
-                                  children: [
-                                    Icon(
-                                      Icons.hotel_outlined,
-                                      size: 36,
-                                      color: scheme.onSurfaceVariant,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      'No guests currently checked in',
-                                      style: theme.textTheme.bodyMedium
-                                          ?.copyWith(
-                                            color: scheme.onSurfaceVariant,
-                                          ),
-                                    ),
-                                  ],
+                          // In-House Stays Section
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'In-House Guests (${inHouseStays.length})',
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                          )
-                        else
-                          for (final stay in inHouseStays)
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              child: _activeStayCard(context, state, stay),
-                            ),
-
-                        const SizedBox(height: 24),
-
-                        // Upcoming Reservations Section
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Upcoming Stays (${upcomingStays.length})',
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            if (widget.onNavigate != null)
-                              TextButton(
-                                onPressed: () => widget.onNavigate!(
-                                  tab: 3,
-                                  bookingFilter: BookingStatus.reserved,
+                              if (widget.onNavigate != null)
+                                TextButton(
+                                  onPressed: () => widget.onNavigate!(
+                                    tab: 3,
+                                    bookingFilter: BookingStatus.checkedIn,
+                                  ),
+                                  child: const Text('View In-House Stays'),
                                 ),
-                                child: const Text('View Reservations'),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          if (inHouseStays.isEmpty)
+                            Card(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                side: BorderSide(color: scheme.outlineVariant),
                               ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        if (upcomingStays.isEmpty)
-                          Card(
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              side: BorderSide(color: scheme.outlineVariant),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(24),
-                              child: Center(
-                                child: Column(
-                                  children: [
-                                    Icon(
-                                      Icons.calendar_today_outlined,
-                                      size: 36,
-                                      color: scheme.onSurfaceVariant,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      'No pending reservations',
-                                      style: theme.textTheme.bodyMedium
-                                          ?.copyWith(
-                                            color: scheme.onSurfaceVariant,
-                                          ),
-                                    ),
-                                  ],
+                              child: Padding(
+                                padding: const EdgeInsets.all(24),
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Icons.hotel_outlined,
+                                        size: 36,
+                                        color: scheme.onSurfaceVariant,
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'No guests currently checked in',
+                                        style: theme.textTheme.bodyMedium
+                                            ?.copyWith(
+                                              color: scheme.onSurfaceVariant,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          )
-                        else
-                          for (final stay in upcomingStays.take(5))
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              child: _activeStayCard(context, state, stay),
-                            ),
-                      ]),
+                            )
+                          else
+                            for (final stay in inHouseStays)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: _activeStayCard(context, state, stay),
+                              ),
+
+                          const SizedBox(height: 24),
+
+                          // Upcoming Reservations Section
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Upcoming Stays (${upcomingStays.length})',
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              if (widget.onNavigate != null)
+                                TextButton(
+                                  onPressed: () => widget.onNavigate!(
+                                    tab: 3,
+                                    bookingFilter: BookingStatus.reserved,
+                                  ),
+                                  child: const Text('View Reservations'),
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          if (upcomingStays.isEmpty)
+                            Card(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                side: BorderSide(color: scheme.outlineVariant),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(24),
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Icons.calendar_today_outlined,
+                                        size: 36,
+                                        color: scheme.onSurfaceVariant,
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'No pending reservations',
+                                        style: theme.textTheme.bodyMedium
+                                            ?.copyWith(
+                                              color: scheme.onSurfaceVariant,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
+                          else
+                            for (final stay in upcomingStays.take(5))
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: _activeStayCard(context, state, stay),
+                              ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

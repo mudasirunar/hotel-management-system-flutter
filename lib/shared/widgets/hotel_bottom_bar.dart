@@ -121,10 +121,9 @@ class _Tab extends StatelessWidget {
       label: destination.label,
       onTap: onTap,
       excludeSemantics: true,
-      child: InkWell(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: onTap,
-        excludeFromSemantics: true,
-        borderRadius: BorderRadius.circular(18),
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: 64, minWidth: 48),
           child: Padding(
