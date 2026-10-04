@@ -446,7 +446,7 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
                               ],
                             ),
                             const SizedBox(height: 12),
-                            if (availableRooms.isEmpty) ...[
+                            if (availableRooms.isEmpty)
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
@@ -470,8 +470,9 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
                                     ),
                                   ],
                                 ),
-                              ),
-                              for (final room in availableRooms) ...[
+                              )
+                            else
+                              for (final room in availableRooms)
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 8),
                                   child: Material(
@@ -515,8 +516,6 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
                                     ),
                                   ),
                                 ),
-                              ],
-                            ],
                           ],
                         ),
                       ),
@@ -685,10 +684,16 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Room ${selectedRoom.number} (${selectedRoom.type})',
+                                  Expanded(
+                                    child: Text(
+                                      'Room ${selectedRoom.number} (${selectedRoom.type})',
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
+                                  const SizedBox(width: 12),
                                   Text(
                                     '${formatPkr(selectedRoom.nightlyRateMinor)} / night',
                                   ),
@@ -699,9 +704,12 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    'Duration ($nights ${nights == 1 ? 'night' : 'nights'})',
+                                  Expanded(
+                                    child: Text(
+                                      'Duration ($nights ${nights == 1 ? 'night' : 'nights'})',
+                                    ),
                                   ),
+                                  const SizedBox(width: 12),
                                   Text(
                                     formatPkr(
                                       nights * selectedRoom.nightlyRateMinor,

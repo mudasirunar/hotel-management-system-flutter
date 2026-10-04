@@ -277,14 +277,18 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                                 children: [
                                   Row(
                                     children: [
-                                      Text(
-                                        room != null
-                                            ? 'Room ${room.number} • ${room.type}'
-                                            : 'Room ${booking.roomId}',
-                                        style: theme.textTheme.titleMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                      Flexible(
+                                        child: Text(
+                                          room != null
+                                              ? 'Room ${room.number} • ${room.type}'
+                                              : 'Room ${booking.roomId}',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: theme.textTheme.titleMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
                                       ),
                                       if (room != null) ...[
                                         const SizedBox(width: 4),
@@ -302,6 +306,8 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                                       booking.arrivalDate,
                                       booking.departureDate,
                                     ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: theme.textTheme.bodyMedium?.copyWith(
                                       color: scheme.onSurfaceVariant,
                                     ),
@@ -309,6 +315,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                                 ],
                               ),
                             ),
+                            const SizedBox(width: 12),
                             BookingStatusBadge(status: booking.status),
                           ],
                         ),
@@ -614,11 +621,15 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        Text(
-          value,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            fontWeight: isBold ? FontWeight.bold : FontWeight.w500,
-            color: valueColor,
+        const SizedBox(width: 8),
+        Flexible(
+          child: Text(
+            value,
+            textAlign: TextAlign.end,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              fontWeight: isBold ? FontWeight.bold : FontWeight.w500,
+              color: valueColor,
+            ),
           ),
         ),
       ],

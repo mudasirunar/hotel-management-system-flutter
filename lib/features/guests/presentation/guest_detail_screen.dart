@@ -254,6 +254,9 @@ class _GuestDetailScreenState extends State<GuestDetailScreen> {
                                                         )
                                                         ? 'Room ${state.room(booking.roomId).number} • ${state.room(booking.roomId).type}'
                                                         : 'Room ${booking.roomId}',
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.w600,
@@ -262,6 +265,9 @@ class _GuestDetailScreenState extends State<GuestDetailScreen> {
                                                   const SizedBox(height: 2),
                                                   Text(
                                                     '${booking.arrivalDate} → ${booking.departureDate}',
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                       fontSize: 12,
                                                       color: Theme.of(context)
@@ -272,6 +278,7 @@ class _GuestDetailScreenState extends State<GuestDetailScreen> {
                                                 ],
                                               ),
                                             ),
+                                            const SizedBox(width: 8),
                                             BookingStatusBadge(
                                               status: booking.status,
                                             ),
