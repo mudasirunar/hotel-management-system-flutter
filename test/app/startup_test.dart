@@ -34,11 +34,17 @@ void main() {
     repository.readGate!.complete();
     await tester.pumpAndSettle();
     expect(find.text('Unable to open your records'), findsOneWidget);
-    expect(find.text('Rooms'), findsNothing);
+    expect(
+      find.text('Manage your rooms, rates, and current occupancy.'),
+      findsNothing,
+    );
     repository.failRead = false;
     await tester.tap(find.text('Retry'));
     await tester.pumpAndSettle();
-    expect(find.text('Rooms'), findsOneWidget);
+    expect(
+      find.text('Manage your rooms, rates, and current occupancy.'),
+      findsOneWidget,
+    );
     expect(find.text('Retry'), findsNothing);
     await tester.pumpWidget(const SizedBox.shrink());
     await controller.close();

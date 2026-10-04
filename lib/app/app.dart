@@ -1,9 +1,11 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import '../application/hotel_controller.dart';
 import '../application/theme_controller.dart';
 import '../data/local/hive_hotel_repository.dart';
-import '../features/rooms/presentation/rooms_screen.dart';
+import 'navigation.dart';
 import 'theme.dart';
 
 class HotelManagementApp extends StatefulWidget {
@@ -53,7 +55,9 @@ class _HotelManagementAppState extends State<HotelManagementApp> {
       darkTheme: HotelTheme.dark,
       themeMode: _themeController.mode,
       home: Scaffold(
+        // NavigationBar paints through the bottom inset and protects its own controls.
         body: SafeArea(
+          bottom: false,
           child: ListenableBuilder(
             listenable: _controller,
             builder: (context, _) => _themeController.loading
@@ -100,7 +104,7 @@ class _HotelManagementAppState extends State<HotelManagementApp> {
                         ),
                       ),
                     ),
-                    HotelLoadStatus.ready => RoomsScreen(
+                    HotelLoadStatus.ready => HotelWorkspace(
                       controller: _controller,
                       themeController: _themeController,
                     ),

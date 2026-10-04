@@ -2,44 +2,43 @@ import 'package:flutter/material.dart';
 
 import '../../../application/hotel_controller.dart';
 import '../../../domain/hotel_exception.dart';
-import '../../../shared/formatting/money.dart';
-import 'room_form_screen.dart';
-import 'room_widgets.dart';
+import '../../../shared/formatting/guest_details.dart';
+import 'guest_form_screen.dart';
 import '../../../shared/widgets/app_notice.dart';
 
-class RoomDetailScreen extends StatefulWidget {
-  const RoomDetailScreen({
+class GuestDetailScreen extends StatefulWidget {
+  const GuestDetailScreen({
     super.key,
     required this.controller,
-    required this.roomId,
+    required this.guestId,
   });
 
   final HotelController controller;
-  final String roomId;
+  final String guestId;
 
   @override
-  State<RoomDetailScreen> createState() => _RoomDetailScreenState();
+  State<GuestDetailScreen> createState() => _GuestDetailScreenState();
 }
 
-class _RoomDetailScreenState extends State<RoomDetailScreen> {
+class _GuestDetailScreenState extends State<GuestDetailScreen> {
   bool _deleting = false;
   bool _confirming = false;
   String? _error;
 
-  Future<void> _delete(String number) async {
+  Future<void> _delete() async {
     if (_deleting || _confirming) return;
     _confirming = true;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Delete room $number?'),
+        title: const Text('Delete guest?'),
         content: const Text(
-          'This permanently removes the room from your inventory. This cannot be undone.',
+          'This permanently removes this guest profile. This cannot be undone.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Keep room'),
+            child: const Text('Keep guest'),
           ),
           FilledButton(
             style: FilledButton.styleFrom(
@@ -47,7 +46,7 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
               foregroundColor: Theme.of(context).colorScheme.onError,
             ),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete room'),
+            child: const Text('Delete guest'),
           ),
         ],
       ),
@@ -59,7 +58,7 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
       _error = null;
     });
     try {
-      await widget.controller.deleteRoom(widget.roomId);
+      await widget.controller.deleteGuest(widget.guestId);
       if (!mounted) return;
       setState(() => _deleting = false);
       await WidgetsBinding.instance.endOfFrame;
@@ -78,16 +77,16 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
     final saved = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
-        builder: (context) => RoomFormScreen(
+        builder: (context) => GuestFormScreen(
           controller: widget.controller,
-          room: widget.controller.state.room(widget.roomId),
+          guest: widget.controller.state.guest(widget.guestId),
         ),
       ),
     );
     if (mounted && saved == true) {
       setState(() => _error = null);
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Room updated.')));
+          .showSnackBar(const SnackBar(content: Text('Guest updated.')));
     }
   }
 
@@ -96,7 +95,7 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
     canPop: !_deleting,
     child: Scaffold(
       appBar: AppBar(
-        title: const Text('Room details'),
+        title: const Text('Guest details'),
         leading: IconButton(
           onPressed: _deleting ? null : () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back),
@@ -108,18 +107,20 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
           listenable: widget.controller,
           builder: (context, _) {
             final state = widget.controller.state;
-            final matches = state.rooms.where((r) => r.id == widget.roomId);
+            final matches = state.guests.where((r) => r.id == widget.guestId);
             if (matches.isEmpty) {
               return Center(
                 child: Text(
                   _deleting
-                      ? 'Removing room…'
-                      : 'This room is no longer available.',
+                      ? 'Removing guest…'
+                      : 'This guest is no longer available.',
                 ),
               );
             }
-            final room = matches.first;
-            final linked = state.bookings.any((b) => b.roomId == room.id);
+            final guest = matches.first;
+            final linked = state.bookings.any(
+              (b) => b.guestIds.contains(guest.id),
+            );
             return Align(
               alignment: Alignment.topCenter,
               child: ConstrainedBox(
@@ -129,27 +130,17 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: RoomStatusBadge(
-                          status: state.roomStatus(room.id),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
                       Text(
-                        'Room ${room.number}',
+                        guest.name,
                         style: Theme.of(context).textTheme.headlineMedium
                             ?.copyWith(fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        room.type,
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
-                            ),
+                        'Guest profile',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                       const SizedBox(height: 28),
                       Container(
@@ -162,36 +153,41 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text(
-                              'Nightly price',
-                              style: Theme.of(context).textTheme.labelLarge,
+                            _DetailField(
+                              label: 'Phone number',
+                              value: formatPhone(guest.phone),
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              formatPkr(room.nightlyRateMinor),
-                              style: Theme.of(context).textTheme.headlineSmall,
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 20),
+                              child: Divider(),
                             ),
-                            const SizedBox(height: 8),
-                            const Text('Per room, per night'),
+                            _DetailField(
+                              label: 'CNIC',
+                              value: formatCnic(guest.cnic),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 20),
+                              child: Divider(),
+                            ),
+                            _DetailField(
+                              label: 'Address',
+                              value: guest.address,
+                            ),
                           ],
                         ),
-                      ),
-                      const SizedBox(height: 24),
-                      const AppNotice(
-                        message: 'Status reflects current occupancy. Future reservations do not mark a room occupied. Check-in and check-out update it automatically.',
                       ),
                       const SizedBox(height: 24),
                       FilledButton.icon(
                         onPressed: _deleting ? null : _edit,
                         icon: const Icon(Icons.edit_outlined, size: 20),
-                        label: const Text('Edit room'),
+                        label: const Text('Edit guest'),
                       ),
                       const SizedBox(height: 12),
                       if (linked) ...[
                         const AppNotice(
-                          message: 'This room has booking history and cannot be deleted. You can still edit its details; existing booked rates stay unchanged.',
+                          message: 'This guest has booking history and cannot be deleted. You can still edit their details without breaking booking links.',
                         ),
                         const SizedBox(height: 12),
                       ],
@@ -200,9 +196,7 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
                         const SizedBox(height: 12),
                       ],
                       OutlinedButton.icon(
-                        onPressed: _deleting || linked
-                            ? null
-                            : () => _delete(room.number),
+                        onPressed: _deleting || linked ? null : _delete,
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Theme.of(context).colorScheme.error,
                         ),
@@ -211,7 +205,7 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
                                 dimension: 18,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  semanticsLabel: 'Deleting room',
+                                  semanticsLabel: 'Deleting guest',
                                 ),
                               )
                             : const Icon(Icons.delete_outline, size: 20),
@@ -219,7 +213,7 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
                           _deleting
                               ? 'Deleting…'
                               : _error == null
-                              ? 'Delete room'
+                              ? 'Delete guest'
                               : 'Retry delete',
                         ),
                       ),
@@ -232,5 +226,25 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
         ),
       ),
     ),
+  );
+}
+
+class _DetailField extends StatelessWidget {
+  const _DetailField({required this.label, required this.value});
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        label,
+        style: Theme.of(context).textTheme.labelLarge
+            ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+      ),
+      const SizedBox(height: 8),
+      SelectableText(value, style: Theme.of(context).textTheme.bodyLarge),
+    ],
   );
 }

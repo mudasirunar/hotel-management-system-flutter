@@ -94,6 +94,8 @@ class _RoomsScreenState extends State<RoomsScreen> {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 1100),
               child: CustomScrollView(
+                primary: false,
+                key: const PageStorageKey('rooms-list'),
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
                 slivers: [
