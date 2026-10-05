@@ -89,37 +89,35 @@ class _HotelWorkspaceState extends State<HotelWorkspace> {
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, constraints) {
       final rail = constraints.maxWidth >= 600;
-      final content = Expanded(
-        child: IndexedStack(
-          index: _selected,
-          children: [
-            DashboardScreen(
-              controller: widget.controller,
-              themeController: widget.themeController,
-              onNavigate: _navigateFromDashboard,
-              scrollController: _tabScrollControllers[0],
-            ),
-            RoomsScreen(
-              controller: widget.controller,
-              themeController: widget.themeController,
-              requestedFilter: _roomFilter,
-              filterRequestKey: _roomFilterKey,
-              scrollController: _tabScrollControllers[1],
-            ),
-            GuestsScreen(
-              controller: widget.controller,
-              themeController: widget.themeController,
-              scrollController: _tabScrollControllers[2],
-            ),
-            BookingsScreen(
-              controller: widget.controller,
-              themeController: widget.themeController,
-              requestedFilter: _bookingFilter,
-              filterRequestKey: _bookingFilterKey,
-              scrollController: _tabScrollControllers[3],
-            ),
-          ],
-        ),
+      final content = IndexedStack(
+        index: _selected,
+        children: [
+          DashboardScreen(
+            controller: widget.controller,
+            themeController: widget.themeController,
+            onNavigate: _navigateFromDashboard,
+            scrollController: _tabScrollControllers[0],
+          ),
+          RoomsScreen(
+            controller: widget.controller,
+            themeController: widget.themeController,
+            requestedFilter: _roomFilter,
+            filterRequestKey: _roomFilterKey,
+            scrollController: _tabScrollControllers[1],
+          ),
+          GuestsScreen(
+            controller: widget.controller,
+            themeController: widget.themeController,
+            scrollController: _tabScrollControllers[2],
+          ),
+          BookingsScreen(
+            controller: widget.controller,
+            themeController: widget.themeController,
+            requestedFilter: _bookingFilter,
+            filterRequestKey: _bookingFilterKey,
+            scrollController: _tabScrollControllers[3],
+          ),
+        ],
       );
       // Keep the same Row/Column ancestry at both widths to retain tab state on rotation.
       return SafeArea(
@@ -160,38 +158,68 @@ class _HotelWorkspaceState extends State<HotelWorkspace> {
             ],
             Expanded(
               key: const ValueKey('workspace-content'),
-              child: Column(
-                children: [
-                  content,
-                  if (!rail)
-                    HotelBottomBar(
-                      selectedIndex: _selected,
-                      onSelected: _select,
-                      destinations: const [
-                        HotelDestination(
-                          icon: Icons.dashboard_outlined,
-                          selectedIcon: Icons.dashboard,
-                          label: 'Dashboard',
+              child: rail
+                  ? Column(children: [Expanded(child: content)])
+                  : Stack(
+                      children: [
+                        // Content fills the entire area — scrolls behind the bar
+                        Positioned.fill(
+                          child: MediaQuery(
+                            // Add bottom inset so list content scrolls clear
+                            // of the floating glass bar
+                            data: MediaQuery.of(context).copyWith(
+                              viewPadding:
+                                  MediaQuery.of(context).viewPadding.copyWith(
+                                    bottom:
+                                        MediaQuery.of(context)
+                                            .viewPadding
+                                            .bottom +
+                                        90,
+                                  ),
+                              padding:
+                                  MediaQuery.of(context).padding.copyWith(
+                                    bottom:
+                                        MediaQuery.of(context).padding.bottom +
+                                        90,
+                                  ),
+                            ),
+                            child: content,
+                          ),
                         ),
-                        HotelDestination(
-                          icon: Icons.bed_outlined,
-                          selectedIcon: Icons.bed,
-                          label: 'Rooms',
-                        ),
-                        HotelDestination(
-                          icon: Icons.people_outline,
-                          selectedIcon: Icons.people,
-                          label: 'Guests',
-                        ),
-                        HotelDestination(
-                          icon: Icons.calendar_today_outlined,
-                          selectedIcon: Icons.calendar_today,
-                          label: 'Bookings',
+                        // Floating glass bottom bar
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: HotelBottomBar(
+                            selectedIndex: _selected,
+                            onSelected: _select,
+                            destinations: const [
+                              HotelDestination(
+                                icon: Icons.dashboard_outlined,
+                                selectedIcon: Icons.dashboard,
+                                label: 'Dashboard',
+                              ),
+                              HotelDestination(
+                                icon: Icons.bed_outlined,
+                                selectedIcon: Icons.bed,
+                                label: 'Rooms',
+                              ),
+                              HotelDestination(
+                                icon: Icons.people_outline,
+                                selectedIcon: Icons.people,
+                                label: 'Guests',
+                              ),
+                              HotelDestination(
+                                icon: Icons.calendar_today_outlined,
+                                selectedIcon: Icons.calendar_today,
+                                label: 'Bookings',
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                ],
-              ),
             ),
           ],
         ),

@@ -1,4 +1,4 @@
-import 'dart:ui' show SemanticsRole;
+import 'dart:ui' show ImageFilter, SemanticsRole;
 
 import 'package:flutter/material.dart';
 
@@ -14,7 +14,10 @@ class HotelDestination {
   final IconData selectedIcon;
 }
 
-/// Compact vertical destinations keep the same design as more tabs are added.
+/// iOS-style frosted glass bottom navigation bar.
+///
+/// Renders a blurred, semi-transparent surface that lets content scroll
+/// underneath it for a modern "glass liquid" effect.
 class HotelBottomBar extends StatelessWidget {
   const HotelBottomBar({
     super.key,
@@ -31,67 +34,93 @@ class HotelBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final dark = Theme.of(context).brightness == Brightness.dark;
     final duration = MediaQuery.disableAnimationsOf(context)
         ? Duration.zero
         : const Duration(milliseconds: 220);
-    return Material(
-      color: scheme.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        side: BorderSide(color: scheme.outlineVariant),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: SafeArea(
-        top: false,
-        minimum: const EdgeInsets.fromLTRB(8, 10, 8, 6),
-        child: Semantics(
-          role: SemanticsRole.tabBar,
-          explicitChildNodes: true,
-          child: Stack(
-            children: [
-              // Only the icon gets the active capsule; labels never widen it.
-              PositionedDirectional(
-                start: 0,
-                end: 0,
-                top: 4,
-                height: 36,
-                child: AnimatedAlign(
-                  alignment: AlignmentDirectional(
-                    -1 + 2 * selectedIndex / (destinations.length - 1),
-                    0,
-                  ),
-                  duration: duration,
-                  curve: Curves.easeOutCubic,
-                  child: FractionallySizedBox(
-                    widthFactor: 1 / destinations.length,
-                    child: Center(
-                      child: Container(
-                        width: 48,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: scheme.primary,
-                          borderRadius: BorderRadius.circular(14),
+
+    // Frosted glass surface:
+    // Dark mode: ~55% dark obsidian glass
+    // Light mode: rich emerald tint (emerald-200) with ultra-high transparency (~21% opacity)
+    final glassTint = dark
+        ? const Color(0xFF16231D).withAlpha(140)
+        : const Color(0xFFA7F3D0).withAlpha(50);
+
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
+        child: Container(
+          decoration: BoxDecoration(
+            color: glassTint,
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(24)),
+            border: Border(
+              top: BorderSide(
+                color: dark
+                    ? Colors.white.withAlpha(20)
+                    : const Color(0xFF007F5F).withAlpha(28),
+                width: 0.5,
+              ),
+            ),
+          ),
+          child: SafeArea(
+            top: false,
+            minimum: const EdgeInsets.fromLTRB(8, 10, 8, 6),
+            child: Semantics(
+              role: SemanticsRole.tabBar,
+              explicitChildNodes: true,
+              child: Stack(
+                children: [
+                  // Animated active capsule
+                  PositionedDirectional(
+                    start: 0,
+                    end: 0,
+                    top: 4,
+                    height: 36,
+                    child: AnimatedAlign(
+                      alignment: AlignmentDirectional(
+                        -1 +
+                            2 *
+                                selectedIndex /
+                                (destinations.length - 1),
+                        0,
+                      ),
+                      duration: duration,
+                      curve: Curves.easeOutCubic,
+                      child: FractionallySizedBox(
+                        widthFactor: 1 / destinations.length,
+                        child: Center(
+                          child: Container(
+                            width: 48,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: scheme.primary,
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (final (index, destination) in destinations.indexed)
-                    Expanded(
-                      child: _Tab(
-                        destination: destination,
-                        selected: index == selectedIndex,
-                        duration: duration,
-                        onTap: () => onSelected(index),
-                      ),
-                    ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (final (index, destination)
+                          in destinations.indexed)
+                        Expanded(
+                          child: _Tab(
+                            destination: destination,
+                            selected: index == selectedIndex,
+                            duration: duration,
+                            onTap: () => onSelected(index),
+                          ),
+                        ),
+                    ],
+                  ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),

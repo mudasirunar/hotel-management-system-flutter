@@ -437,6 +437,12 @@ class _GuestsScreenState extends State<GuestsScreen> {
                         },
                       ),
                     ),
+                  // Bottom spacer so content scrolls clear of floating bottom bar
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).padding.bottom,
+                    ),
+                  ),
                 ],
               ),
             ),

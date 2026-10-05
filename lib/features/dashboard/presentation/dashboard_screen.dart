@@ -192,10 +192,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'In-House Guests (${inHouseStays.length})',
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
+                              Expanded(
+                                child: Text(
+                                  'In-House Guests (${inHouseStays.length})',
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               if (widget.onNavigate != null)
@@ -252,10 +255,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Upcoming Stays (${upcomingStays.length})',
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
+                              Expanded(
+                                child: Text(
+                                  'Upcoming Stays (${upcomingStays.length})',
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               if (widget.onNavigate != null)
@@ -307,6 +313,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                         ],
                       ),
+                    ),
+                  ),
+                  // Bottom spacer so content scrolls clear of floating bottom bar
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).padding.bottom,
                     ),
                   ),
                 ],
@@ -471,22 +483,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Icon(data.icon, size: 18, color: data.color),
                   ),
                   if (data.badge != null)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 7,
-                        vertical: 3,
-                      ),
-                      decoration: BoxDecoration(
-                        color: data.color.withAlpha(dark ? 30 : 18),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        data.badge!,
-                        style: TextStyle(
-                          color: data.color,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.2,
+                    Flexible(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 7,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          color: data.color.withAlpha(dark ? 30 : 18),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          data.badge!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: data.color,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -0.2,
+                          ),
                         ),
                       ),
                     ),
