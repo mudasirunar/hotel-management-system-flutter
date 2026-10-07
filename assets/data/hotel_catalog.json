@@ -1,0 +1,709 @@
+{
+  "catalogVersion": 1,
+  "hotels": [
+    {
+      "id": "hotel_khi_01",
+      "name": "The Pearl Palace Karachi",
+      "description": "An iconic 5-star haven in the heart of Karachi offering panoramic Arabian sea breezes, world-class dining, and lush executive lounges.",
+      "city": "Karachi",
+      "area": "Civil Lines",
+      "address": "Club Road, Civil Lines, Karachi",
+      "latitude": 24.8510,
+      "longitude": 67.0270,
+      "rating": 4.8,
+      "reviewCount": 420,
+      "amenities": ["Free High-Speed WiFi", "Swimming Pool", "Spa & Wellness", "Fine Dining", "Fitness Center", "Valet Parking", "Airport Shuttle"],
+      "checkInTime": "14:00",
+      "checkOutTime": "12:00",
+      "cancellationPolicy": "Free cancellation up to 24 hours before check-in.",
+      "gallery": [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room_khi_01_101",
+          "hotelId": "hotel_khi_01",
+          "number": "Deluxe King 301",
+          "type": "Deluxe King",
+          "description": "Spacious king bedroom with plush bedding, work desk, and city skyline view.",
+          "capacity": 2,
+          "bedDescription": "1 King Bed",
+          "nightlyRateMinor": 18500,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["City View", "Free WiFi", "Marble Bath", "Smart TV", "Mini Bar"]
+        },
+        {
+          "id": "room_khi_01_102",
+          "hotelId": "hotel_khi_01",
+          "number": "Executive Twin 302",
+          "type": "Executive Twin",
+          "description": "Comfortable room with twin beds, high-speed fiber internet, and executive lounge access.",
+          "capacity": 2,
+          "bedDescription": "2 Twin Beds",
+          "nightlyRateMinor": 21000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Lounge Access", "Free WiFi", "Desk", "Coffee Maker"]
+        },
+        {
+          "id": "room_khi_01_103",
+          "hotelId": "hotel_khi_01",
+          "number": "Grand Sea View Suite 501",
+          "type": "Grand Suite",
+          "description": "Luxurious master suite featuring private lounge, whirlpool bathtub, and sweeping coastal vistas.",
+          "capacity": 3,
+          "bedDescription": "1 King Bed & 1 Daybed",
+          "nightlyRateMinor": 38000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Sea View", "Whirlpool Tub", "Living Room", "Free Breakfast", "Valet"]
+        },
+        {
+          "id": "room_khi_01_104",
+          "hotelId": "hotel_khi_01",
+          "number": "Family Residence 601",
+          "type": "Family Suite",
+          "description": "Two interconnected rooms perfect for family stays with full multimedia entertainment.",
+          "capacity": 4,
+          "bedDescription": "1 King Bed & 2 Twin Beds",
+          "nightlyRateMinor": 46000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["2 Bedrooms", "Dining Nook", "Family Bath", "Kids Welcome Kit"]
+        }
+      ]
+    },
+    {
+      "id": "hotel_khi_02",
+      "name": "Avari Towers Karachi",
+      "description": "Towering over downtown Karachi, boasting temperature-controlled outdoor pools, tennis courts, and gourmet specialty restaurants.",
+      "city": "Karachi",
+      "area": "Saddar",
+      "address": "242-244 Fatima Jinnah Road, Karachi",
+      "latitude": 24.8532,
+      "longitude": 67.0326,
+      "rating": 4.6,
+      "reviewCount": 350,
+      "amenities": ["Free High-Speed WiFi", "Outdoor Pool", "Fitness Center", "Tennis Courts", "Multi-Cuisine Dining", "Valet Parking"],
+      "checkInTime": "14:00",
+      "checkOutTime": "12:00",
+      "cancellationPolicy": "Free cancellation up to 48 hours before arrival.",
+      "gallery": [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room_khi_02_201",
+          "hotelId": "hotel_khi_02",
+          "number": "Standard Queen 405",
+          "type": "Standard Queen",
+          "description": "Modern queen room with ergonomic work station and soundproof windows.",
+          "capacity": 2,
+          "bedDescription": "1 Queen Bed",
+          "nightlyRateMinor": 15500,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Free WiFi", "Soundproof", "Rain Shower", "Work Desk"]
+        },
+        {
+          "id": "room_khi_02_202",
+          "hotelId": "hotel_khi_02",
+          "number": "Tower Executive 810",
+          "type": "Executive King",
+          "description": "High-floor executive room with personalized butler service and complimentary breakfast.",
+          "capacity": 2,
+          "bedDescription": "1 King Bed",
+          "nightlyRateMinor": 24500,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["High Floor", "Free Breakfast", "Butler Service", "Coffee Machine"]
+        },
+        {
+          "id": "room_khi_02_203",
+          "hotelId": "hotel_khi_02",
+          "number": "Diplomatic Suite 1201",
+          "type": "Diplomatic Suite",
+          "description": "Expansive luxury suite with separate boardroom table, kitchen pantry, and marble bathroom.",
+          "capacity": 3,
+          "bedDescription": "1 King Bed",
+          "nightlyRateMinor": 42000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Boardroom Table", "Kitchenette", "Premium Lounge", "Jacuzzi"]
+        }
+      ]
+    },
+    {
+      "id": "hotel_khi_03",
+      "name": "Clifton Beachfront Resort",
+      "description": "A tranquil coastal retreat steps away from Clifton Beach promenade, featuring tranquil ocean terraces and seafood grill.",
+      "city": "Karachi",
+      "area": "Clifton",
+      "address": "Marine Drive, Block 4 Clifton, Karachi",
+      "latitude": 24.8138,
+      "longitude": 67.0305,
+      "rating": 4.7,
+      "reviewCount": 280,
+      "amenities": ["Ocean Views", "Free WiFi", "Rooftop Grill", "Swimming Pool", "Spa", "Private Beach Access"],
+      "checkInTime": "15:00",
+      "checkOutTime": "12:00",
+      "cancellationPolicy": "Free cancellation up to 24 hours before check-in.",
+      "gallery": [
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room_khi_03_301",
+          "hotelId": "hotel_khi_03",
+          "number": "Seaside Deluxe 202",
+          "type": "Deluxe Balcony",
+          "description": "Crisp white decor with a private balcony overlooking the Arabian Sea.",
+          "capacity": 2,
+          "bedDescription": "1 King Bed",
+          "nightlyRateMinor": 22000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Private Balcony", "Sea View", "Air Conditioning", "Free WiFi"]
+        },
+        {
+          "id": "room_khi_03_302",
+          "hotelId": "hotel_khi_03",
+          "number": "Sunset Penthouse 401",
+          "type": "Penthouse",
+          "description": "Top-floor penthouse with private sun terrace, plunge pool, and floor-to-ceiling glass.",
+          "capacity": 2,
+          "bedDescription": "1 California King Bed",
+          "nightlyRateMinor": 55000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Private Plunge Pool", "Terrace", "Butler", "Champagne Service"]
+        }
+      ]
+    },
+    {
+      "id": "hotel_lhr_01",
+      "name": "The Nishat Hotel Gulberg",
+      "description": "Boutique elegance in Lahore's premier shopping and dining district, featuring Parisian decor and artisanal bistros.",
+      "city": "Lahore",
+      "area": "Gulberg",
+      "address": "9A Mian Mahmood Ali Kasuri Rd, Gulberg III, Lahore",
+      "latitude": 31.5120,
+      "longitude": 74.3540,
+      "rating": 4.9,
+      "reviewCount": 510,
+      "amenities": ["Free High-Speed WiFi", "Indoor Heated Pool", "Artisan Bakery", "Fitness Center", "Valet Parking", "Concierge"],
+      "checkInTime": "14:00",
+      "checkOutTime": "12:00",
+      "cancellationPolicy": "Free cancellation up to 24 hours before check-in.",
+      "gallery": [
+        "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room_lhr_01_101",
+          "hotelId": "hotel_lhr_01",
+          "number": "Royal Deluxe 204",
+          "type": "Royal Deluxe",
+          "description": "Handcrafted furnishings with Egyptian cotton sheets, espresso machine, and Italian marble shower.",
+          "capacity": 2,
+          "bedDescription": "1 King Bed",
+          "nightlyRateMinor": 23500,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Espresso Machine", "Italian Marble Bath", "Smart TV", "Free WiFi"]
+        },
+        {
+          "id": "room_lhr_01_102",
+          "hotelId": "hotel_lhr_01",
+          "number": "Parisian Suite 402",
+          "type": "Junior Suite",
+          "description": "Chic junior suite with velvet lounge seating and French balcony overlooking Gulberg.",
+          "capacity": 3,
+          "bedDescription": "1 King Bed & 1 Daybed",
+          "nightlyRateMinor": 34000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["French Balcony", "Velvet Sofa", "Breakfast Included", "Free WiFi"]
+        }
+      ]
+    },
+    {
+      "id": "hotel_lhr_02",
+      "name": "Heritage Haveli Suites",
+      "description": "Authentic Mughal-inspired boutique hotel in Lahore's cultural heart, featuring courtyard fountains, rooftop shahi dinners, and live sitar music.",
+      "city": "Lahore",
+      "area": "Walled City",
+      "address": "Delhi Gate Bazaar, Walled City, Lahore",
+      "latitude": 31.5830,
+      "longitude": 74.3210,
+      "rating": 4.8,
+      "reviewCount": 195,
+      "amenities": ["Courtyard Gardens", "Rooftop Terrace", "Traditional Breakfast", "Cultural Tours", "Free WiFi"],
+      "checkInTime": "13:00",
+      "checkOutTime": "11:30",
+      "cancellationPolicy": "Free cancellation up to 48 hours before arrival.",
+      "gallery": [
+        "https://images.unsplash.com/photo-1544984243-ec57ea16fe25?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room_lhr_02_201",
+          "hotelId": "hotel_lhr_02",
+          "number": "Jharoka Room 102",
+          "type": "Heritage Room",
+          "description": "Carved wooden lattice window overlooking the courtyard with traditional silk textiles.",
+          "capacity": 2,
+          "bedDescription": "1 Queen Bed",
+          "nightlyRateMinor": 17000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Courtyard View", "Silk Linens", "Heritage Decor", "Free Chai"]
+        },
+        {
+          "id": "room_lhr_02_202",
+          "hotelId": "hotel_lhr_02",
+          "number": "Diwan-e-Khas Suite 201",
+          "type": "Master Haveli Suite",
+          "description": "High arched ceilings, brass chandeliers, and private terrace facing Badshahi Mosque silhouettes.",
+          "capacity": 3,
+          "bedDescription": "1 King Bed",
+          "nightlyRateMinor": 31000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Monument View", "Arched Ceilings", "Private Terrace", "Traditional Breakfast"]
+        }
+      ]
+    },
+    {
+      "id": "hotel_lhr_03",
+      "name": "DHA Swiss Grand Lahore",
+      "description": "State-of-the-art contemporary hotel near Allama Iqbal International Airport and DHA Phase 5, perfect for modern business travelers.",
+      "city": "Lahore",
+      "area": "DHA",
+      "address": "Sector G, DHA Phase 5, Lahore",
+      "latitude": 31.4700,
+      "longitude": 74.4100,
+      "rating": 4.7,
+      "reviewCount": 310,
+      "amenities": ["Airport Shuttle", "Free WiFi", "Infinity Pool", "Executive Boardrooms", "24/7 Room Service"],
+      "checkInTime": "14:00",
+      "checkOutTime": "12:00",
+      "cancellationPolicy": "Free cancellation up to 24 hours before check-in.",
+      "gallery": [
+        "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room_lhr_03_301",
+          "hotelId": "hotel_lhr_03",
+          "number": "Smart Business King 315",
+          "type": "Business King",
+          "description": "Ergonomic work station, ultra-quiet acoustic insulation, and rapid wireless charging pads.",
+          "capacity": 2,
+          "bedDescription": "1 King Bed",
+          "nightlyRateMinor": 19500,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Smart Desk", "High-Speed WiFi", "Acoustic Glass", "Express Laundry"]
+        },
+        {
+          "id": "room_lhr_03_302",
+          "hotelId": "hotel_lhr_03",
+          "number": "Executive Corner Suite 501",
+          "type": "Executive Suite",
+          "description": "Corner suite with floor-to-ceiling windows overlooking DHA Lahore and separate lounge.",
+          "capacity": 3,
+          "bedDescription": "1 King Bed & 1 Daybed",
+          "nightlyRateMinor": 28000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Corner Views", "Lounge Access", "Espresso Machine", "Valet"]
+        }
+      ]
+    },
+    {
+      "id": "hotel_isb_01",
+      "name": "Serena Margalla Sanctuary",
+      "description": "Surrounded by 14 acres of manicured rose gardens against the backdrop of Margalla Hills, celebrating Islamic architecture and luxury hospitality.",
+      "city": "Islamabad",
+      "area": "G-5",
+      "address": "Khayaban-e-Suhrawardy, G-5/1, Islamabad",
+      "latitude": 33.7200,
+      "longitude": 73.0900,
+      "rating": 4.9,
+      "reviewCount": 680,
+      "amenities": ["Rose Gardens", "Heated Pool", "Luxury Spa", "7 Restaurants", "Helipad Access", "Valet Parking"],
+      "checkInTime": "14:00",
+      "checkOutTime": "12:00",
+      "cancellationPolicy": "Free cancellation up to 48 hours before arrival.",
+      "gallery": [
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room_isb_01_101",
+          "hotelId": "hotel_isb_01",
+          "number": "Garden Deluxe 210",
+          "type": "Garden Deluxe",
+          "description": "Ground floor room opening directly onto private manicured lawns with views of Margalla Ridge.",
+          "capacity": 2,
+          "bedDescription": "1 King Bed",
+          "nightlyRateMinor": 28000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Garden Access", "Mountain Views", "Free WiFi", "Luxury Toiletries"]
+        },
+        {
+          "id": "room_isb_01_102",
+          "hotelId": "hotel_isb_01",
+          "number": "Margalla Panorama Suite 501",
+          "type": "Panorama Suite",
+          "description": "Floor-to-ceiling glass framing the national monument and hill range, with bespoke marble lounge.",
+          "capacity": 3,
+          "bedDescription": "1 King Bed",
+          "nightlyRateMinor": 48000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Panoramic Views", "Butler Service", "Free Minibar", "VIP Check-in"]
+        }
+      ]
+    },
+    {
+      "id": "hotel_isb_02",
+      "name": "Islamabad Marriott Regency",
+      "description": "Centrally positioned in the diplomatic capital with premier steakhouse dining, health club, and crystal ballroom.",
+      "city": "Islamabad",
+      "area": "F-5",
+      "address": "Aga Khan Road, Shalimar 5, Islamabad",
+      "latitude": 33.7310,
+      "longitude": 73.0820,
+      "rating": 4.7,
+      "reviewCount": 440,
+      "amenities": ["Indoor Heated Pool", "Steam & Sauna", "Steakhouse", "Business Center", "Free WiFi"],
+      "checkInTime": "14:00",
+      "checkOutTime": "12:00",
+      "cancellationPolicy": "Free cancellation up to 24 hours before check-in.",
+      "gallery": [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room_isb_02_201",
+          "hotelId": "hotel_isb_02",
+          "number": "Regency Twin 314",
+          "type": "Regency Twin",
+          "description": "Comfortable twin room with ergonomic study desk and sound isolation.",
+          "capacity": 2,
+          "bedDescription": "2 Twin Beds",
+          "nightlyRateMinor": 22000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Desk", "Free WiFi", "Coffee Maker", "Safe"]
+        },
+        {
+          "id": "room_isb_02_202",
+          "hotelId": "hotel_isb_02",
+          "number": "Executive King 520",
+          "type": "Executive King",
+          "description": "Spacious king bedroom with lounge privileges, afternoon tea, and garment pressing.",
+          "capacity": 2,
+          "bedDescription": "1 King Bed",
+          "nightlyRateMinor": 29500,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Executive Lounge", "Afternoon Tea", "Free WiFi", "Deep Soaking Tub"]
+        }
+      ]
+    },
+    {
+      "id": "hotel_isb_03",
+      "name": "The Centaurus Vista Suites",
+      "description": "Modern high-rise residential suites connected directly to The Centaurus Mall with cineplex and sky dining.",
+      "city": "Islamabad",
+      "area": "F-8",
+      "address": "Jinnah Avenue, F-8/4, Islamabad",
+      "latitude": 33.7080,
+      "longitude": 73.0530,
+      "rating": 4.6,
+      "reviewCount": 260,
+      "amenities": ["Mall Direct Access", "Rooftop Pool", "Kitchenette", "Free Parking", "Gym"],
+      "checkInTime": "15:00",
+      "checkOutTime": "12:00",
+      "cancellationPolicy": "Free cancellation up to 24 hours before check-in.",
+      "gallery": [
+        "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room_isb_03_301",
+          "hotelId": "hotel_isb_03",
+          "number": "Vista 1-Bedroom 1402",
+          "type": "1-Bedroom Suite",
+          "description": "Self-contained suite with equipped kitchen, washer-dryer, and elevated city vistas.",
+          "capacity": 3,
+          "bedDescription": "1 King Bed & 1 Sofa Bed",
+          "nightlyRateMinor": 26000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Kitchenette", "Washer", "City Views", "Living Area"]
+        },
+        {
+          "id": "room_isb_03_302",
+          "hotelId": "hotel_isb_03",
+          "number": "Centaurus Premier Studio 1005",
+          "type": "Premier Studio",
+          "description": "Smart open-plan studio directly connected to The Centaurus Mall shopping concourse.",
+          "capacity": 2,
+          "bedDescription": "1 Queen Bed",
+          "nightlyRateMinor": 21000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Mall Access", "Smart TV", "Kitchenette", "Free WiFi"]
+        }
+      ]
+    },
+    {
+      "id": "hotel_mre_01",
+      "name": "Pearl Continental Bhurban",
+      "description": "Prestigious mountain resort perched amidst fragrant pine forests with nine-hole golf course and alpine walking trails.",
+      "city": "Murree",
+      "area": "Bhurban",
+      "address": "Bhurban Hills, Murree, Punjab",
+      "latitude": 33.9550,
+      "longitude": 73.4520,
+      "rating": 4.9,
+      "reviewCount": 780,
+      "amenities": ["Pine Forest Views", "Golf Course", "Heated Indoor Pool", "Horse Riding", "Spa & Sauna", "Fireplace Lounges"],
+      "checkInTime": "14:00",
+      "checkOutTime": "12:00",
+      "cancellationPolicy": "Free cancellation up to 48 hours before check-in.",
+      "gallery": [
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room_mre_01_101",
+          "hotelId": "hotel_mre_01",
+          "number": "Valley Deluxe 108",
+          "type": "Valley Deluxe",
+          "description": "Cozy pine-wood accents with a private terrace viewing the Kashmir valley peaks.",
+          "capacity": 2,
+          "bedDescription": "1 King Bed",
+          "nightlyRateMinor": 27500,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Valley View", "Private Balcony", "Heating", "Warm Wool Throws"]
+        },
+        {
+          "id": "room_mre_01_102",
+          "hotelId": "hotel_mre_01",
+          "number": "Alpine Chalet Suite 305",
+          "type": "Chalet Suite",
+          "description": "Two-level alpine loft with stone fireplace, heated bathroom floors, and panoramic mountain deck.",
+          "capacity": 4,
+          "bedDescription": "1 King Bed & 2 Single Beds",
+          "nightlyRateMinor": 49000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Fireplace", "Loft Bedroom", "Heated Floors", "Mountain Deck"]
+        }
+      ]
+    },
+    {
+      "id": "hotel_mre_02",
+      "name": "Lockwood Heritage Retreat",
+      "description": "Built in 1880, this historic colonial lodge offers roaring fireplaces, afternoon cream tea, and timeless hill-station nostalgia.",
+      "city": "Murree",
+      "area": "Clifton Road",
+      "address": "Clifton Road, Murree Hills",
+      "latitude": 33.9060,
+      "longitude": 73.3940,
+      "rating": 4.6,
+      "reviewCount": 210,
+      "amenities": ["Historic Colonial Architecture", "Fireplace in Rooms", "Afternoon Tea", "Lush Lawn", "Free WiFi"],
+      "checkInTime": "13:00",
+      "checkOutTime": "11:00",
+      "cancellationPolicy": "Free cancellation up to 48 hours before check-in.",
+      "gallery": [
+        "https://images.unsplash.com/photo-1544984243-ec57ea16fe25?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room_mre_02_201",
+          "hotelId": "hotel_mre_02",
+          "number": "Colonial Fireplace Room 04",
+          "type": "Colonial Heritage",
+          "description": "Original cedar-wood ceiling, active hearth fireplace, and antique writing bureau.",
+          "capacity": 2,
+          "bedDescription": "1 Four-Poster King Bed",
+          "nightlyRateMinor": 19000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Wood Fireplace", "Cedar Ceilings", "English Tea Set", "Electric Blankets"]
+        },
+        {
+          "id": "room_mre_02_202",
+          "hotelId": "hotel_mre_02",
+          "number": "Pines Garden Cottage 08",
+          "type": "Garden Cottage",
+          "description": "Detached stone cottage nestled among deodar pines with private patio and lawn access.",
+          "capacity": 3,
+          "bedDescription": "1 King Bed & 1 Daybed",
+          "nightlyRateMinor": 26000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Private Patio", "Fireplace", "Lawn Access", "Chai Service"]
+        }
+      ]
+    },
+    {
+      "id": "hotel_mre_03",
+      "name": "Pine Top Luxury Resort",
+      "description": "Modern hill-resort overlooking Mall Road vibrant nightlife with quiet forest trails just behind the property.",
+      "city": "Murree",
+      "area": "Mall Road",
+      "address": "Upper Mall Road, Murree",
+      "latitude": 33.9080,
+      "longitude": 73.3920,
+      "rating": 4.5,
+      "reviewCount": 320,
+      "amenities": ["Walk to Mall Road", "Free WiFi", "Heated Rooms", "Family Restaurant", "Terrace BBQ"],
+      "checkInTime": "14:00",
+      "checkOutTime": "12:00",
+      "cancellationPolicy": "Free cancellation up to 24 hours before check-in.",
+      "gallery": [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room_mre_03_301",
+          "hotelId": "hotel_mre_03",
+          "number": "Pine View Twin 202",
+          "type": "Standard Twin",
+          "description": "Warmly heated room with two twin beds and lovely views of towering fir trees.",
+          "capacity": 2,
+          "bedDescription": "2 Twin Beds",
+          "nightlyRateMinor": 14000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Forest View", "Heating", "Hot Water", "Free WiFi"]
+        },
+        {
+          "id": "room_mre_03_302",
+          "hotelId": "hotel_mre_03",
+          "number": "Family Pine Suite 301",
+          "type": "Family Suite",
+          "description": "Two connected rooms with heated floors and extra sofa seating for traveling families.",
+          "capacity": 4,
+          "bedDescription": "1 King Bed & 2 Single Beds",
+          "nightlyRateMinor": 28000,
+          "currency": "PKR",
+          "gallery": [
+            "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=800&q=80"
+          ],
+          "amenities": ["Family Layout", "Heated Floors", "Mountain Balcony", "Free WiFi"]
+        }
+      ]
+    }
+  ],
+  "inventoryBlocks": [
+    {
+      "id": "block_01",
+      "roomId": "room_khi_01_101",
+      "startDate": "2026-10-12",
+      "endDate": "2026-10-14",
+      "kind": "occupied"
+    },
+    {
+      "id": "block_02",
+      "roomId": "room_khi_01_103",
+      "startDate": "2026-10-15",
+      "endDate": "2026-10-18",
+      "kind": "reserved"
+    },
+    {
+      "id": "block_03",
+      "roomId": "room_lhr_01_101",
+      "startDate": "2026-10-10",
+      "endDate": "2026-10-13",
+      "kind": "occupied"
+    },
+    {
+      "id": "block_04",
+      "roomId": "room_isb_01_101",
+      "startDate": "2026-10-11",
+      "endDate": "2026-10-14",
+      "kind": "occupied"
+    },
+    {
+      "id": "block_05",
+      "roomId": "room_mre_01_102",
+      "startDate": "2026-10-16",
+      "endDate": "2026-10-19",
+      "kind": "reserved"
+    }
+  ]
+}
