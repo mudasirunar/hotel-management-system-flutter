@@ -46,6 +46,12 @@ final class HotelRoom {
       throw const FormatException('Room nightly rate must be a positive integer.');
     }
 
+    // If rate was specified in whole PKR (e.g. 18500 for PKR 18,500),
+    // normalize to true minor units (paisa = PKR * 100) so calculations are consistent.
+    final normalizedMinor = (nightlyRateMinor < 100000)
+        ? nightlyRateMinor * 100
+        : nightlyRateMinor;
+
     return HotelRoom(
       id: id.trim(),
       hotelId: hotelId.trim(),
@@ -54,7 +60,7 @@ final class HotelRoom {
       description: description.trim(),
       capacity: capacity,
       bedDescription: bedDescription.trim(),
-      nightlyRateMinor: nightlyRateMinor,
+      nightlyRateMinor: normalizedMinor,
       currency: currency.trim(),
       gallery: List.unmodifiable(gallery),
       amenities: List.unmodifiable(amenities),

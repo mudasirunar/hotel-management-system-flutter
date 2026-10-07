@@ -20,12 +20,6 @@ final class CustomerState {
     final anchor = anchorDate ?? StayDate(now.year, now.month, now.day);
     return CustomerState(
       anchorDate: anchor,
-      profile: const TravelerProfile(
-        id: 'user_local',
-        name: 'Mudasir Unar',
-        phone: '03001234567',
-        email: 'mudasir@example.com',
-      ),
     );
   }
 

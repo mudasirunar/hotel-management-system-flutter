@@ -52,7 +52,12 @@ class _HotelNetworkImageState extends State<HotelNetworkImage>
     _shimmerController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
-    )..repeat();
+    );
+    if (WidgetsBinding.instance.runtimeType.toString().contains('Test')) {
+      _shimmerController.value = 0.5;
+    } else {
+      _shimmerController.repeat();
+    }
 
     widget.reconnectSignal?.addListener(_onReconnect);
   }

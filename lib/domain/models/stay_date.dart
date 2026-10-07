@@ -36,6 +36,15 @@ final class StayDate implements Comparable<StayDate> {
   int nightsUntil(StayDate other) => other._utc.difference(_utc).inDays;
   bool isBefore(StayDate other) => compareTo(other) < 0;
 
+  StayDate addDays(int days) =>
+      StayDate.fromDateTime(DateTime.utc(year, month, day).add(Duration(days: days)));
+
+  DateTime toDateTime() => DateTime(year, month, day);
+
+  int differenceInDays(StayDate start) => start.nightsUntil(this);
+
+  String format() => toString();
+
   @override
   int compareTo(StayDate other) => _utc.compareTo(other._utc);
 
