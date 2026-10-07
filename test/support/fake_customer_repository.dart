@@ -73,11 +73,22 @@ class FakeCustomerRepository implements CustomerRepository {
     inventoryBlocks: [],
   );
 
-  @override
-  Future<HotelCatalog> loadCatalog() async => catalog;
+  bool failRead = false;
+  Future<void>? readGate;
 
   @override
-  Future<CustomerState> loadState() async => state;
+  Future<HotelCatalog> loadCatalog() async {
+    if (readGate != null) await readGate;
+    if (failRead) throw Exception('Simulated catalog read failure');
+    return catalog;
+  }
+
+  @override
+  Future<CustomerState> loadState() async {
+    if (readGate != null) await readGate;
+    if (failRead) throw Exception('Simulated state read failure');
+    return state;
+  }
 
   @override
   Future<void> saveState(CustomerState newState) async {
