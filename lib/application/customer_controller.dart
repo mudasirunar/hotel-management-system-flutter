@@ -247,6 +247,21 @@ final class CustomerController extends ChangeNotifier {
     );
   });
 
+  /// Resets traveler profile back to guest.
+  Future<void> resetProfile() => _mutate('resetProfile', (current) {
+    return current.copyWith(clearProfile: true);
+  });
+
+  /// Clears customer bookings and favorites on this device, keeping the catalog intact.
+  Future<void> clearCustomerData() => _mutate('clearCustomerData', (current) {
+    return current.copyWith(
+      bookings: const [],
+      savedHotelIds: const {},
+      clearProfile: true,
+      clearCity: true,
+    );
+  });
+
   Future<void> _mutate(
     String operation,
     CustomerState Function(CustomerState current) transform,

@@ -330,7 +330,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
                 // Bottom padding spacer
                 const SliverToBoxAdapter(
-                  child: SizedBox(height: 100),
+                  child: SizedBox(height: 132),
                 ),
               ],
             ),

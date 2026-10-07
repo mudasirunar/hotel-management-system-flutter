@@ -36,6 +36,15 @@ void main() {
       expect(block.overlaps(StayDate(2026, 10, 14), StayDate(2026, 10, 18)), isFalse);
     });
 
+    test('StayDate differenceInDays is commutative and returns correct positive nights', () {
+      final arrival = StayDate(2026, 10, 9);
+      final departure = StayDate(2026, 10, 16);
+
+      expect(arrival.differenceInDays(departure), 7);
+      expect(departure.differenceInDays(arrival), 7);
+      expect(arrival.nightsUntil(departure), 7);
+    });
+
     test('Hotel and HotelRoom parse correctly and validate fields', () {
       final room = HotelRoom(
         id: 'r_101',

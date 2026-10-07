@@ -41,7 +41,7 @@ final class StayDate implements Comparable<StayDate> {
 
   DateTime toDateTime() => DateTime(year, month, day);
 
-  int differenceInDays(StayDate start) => start.nightsUntil(this);
+  int differenceInDays(StayDate other) => (nightsUntil(other)).abs();
 
   String format() => toString();
 

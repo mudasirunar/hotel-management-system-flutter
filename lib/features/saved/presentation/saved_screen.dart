@@ -159,7 +159,7 @@ class SavedScreen extends StatelessWidget {
 
                 // Bottom padding
                 const SliverToBoxAdapter(
-                  child: SizedBox(height: 100),
+                  child: SizedBox(height: 132),
                 ),
               ],
             ),

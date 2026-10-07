@@ -8,6 +8,7 @@ import '../../../domain/models/stay_date.dart';
 import '../../../domain/services/connectivity_service.dart';
 import '../../../domain/services/customer_availability_service.dart';
 import '../../../shared/widgets/offline_banner.dart';
+import '../../bookings/presentation/customer_booking_form_screen.dart';
 import '../../explore/presentation/widgets/dates_and_guests_bar.dart';
 import '../../explore/presentation/widgets/stay_dates_and_guests_sheet.dart';
 import 'widgets/hotel_amenities_grid.dart';
@@ -465,13 +466,28 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         fallbackImageUrl: hotel.gallery.isNotEmpty ? hotel.gallery.first : '',
                         reconnectSignal: widget.connectivityService?.reconnectTick,
                         onSelect: () {
-                          widget.onProceedToBooking?.call(
-                            hotel,
-                            room,
-                            _arrival,
-                            _departure,
-                            _partySize,
-                          );
+                          if (widget.onProceedToBooking != null) {
+                            widget.onProceedToBooking!(
+                              hotel,
+                              room,
+                              _arrival,
+                              _departure,
+                              _partySize,
+                            );
+                          } else {
+                            Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => CustomerBookingFormScreen(
+                                  hotel: hotel,
+                                  room: room,
+                                  arrival: _arrival,
+                                  departure: _departure,
+                                  partySize: _partySize,
+                                  customerController: widget.customerController,
+                                ),
+                              ),
+                            );
+                          }
                         },
                       );
                     },

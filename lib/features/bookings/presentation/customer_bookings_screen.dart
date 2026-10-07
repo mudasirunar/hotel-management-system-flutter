@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../application/customer_controller.dart';
 import '../../../domain/models/customer_booking.dart';
 import '../../../shared/formatting/app_money_format.dart';
+import 'customer_booking_detail_screen.dart';
 
 /// Screen displaying the traveler's personal reservations.
 class CustomerBookingsScreen extends StatelessWidget {
@@ -122,7 +123,7 @@ class CustomerBookingsScreen extends StatelessWidget {
                   ),
 
                 const SliverToBoxAdapter(
-                  child: SizedBox(height: 100),
+                  child: SizedBox(height: 132),
                 ),
               ],
             ),
@@ -145,99 +146,137 @@ class CustomerBookingsScreen extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: cardBorder),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Ref: #${booking.id}',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: isDark ? Colors.white60 : const Color(0xFF64748B),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => CustomerBookingDetailScreen(
+                  bookingId: booking.id,
+                  customerController: customerController,
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: isCancelled
-                      ? (isDark ? const Color(0xFF3B1D1D) : const Color(0xFFFEE2E2))
-                      : (isDark ? const Color(0xFF183324) : const Color(0xFFDCFCE7)),
-                  borderRadius: BorderRadius.circular(6),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Ref: #${booking.id}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: isDark ? Colors.white60 : const Color(0xFF64748B),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: isCancelled
+                            ? (isDark ? const Color(0xFF3B1D1D) : const Color(0xFFFEE2E2))
+                            : (isDark ? const Color(0xFF183324) : const Color(0xFFDCFCE7)),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        isCancelled ? 'Cancelled' : 'Confirmed',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: isCancelled
+                              ? const Color(0xFFEF4444)
+                              : const Color(0xFF16A34A),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                child: Text(
-                  isCancelled ? 'Cancelled' : 'Confirmed',
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        booking.hotelName,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      size: 20,
+                      color: isDark ? Colors.white38 : const Color(0xFF94A3B8),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '${booking.roomType} • Room ${booking.roomNumber}',
                   style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    color: isCancelled
-                        ? const Color(0xFFEF4444)
-                        : const Color(0xFF16A34A),
+                    fontSize: 13,
+                    color: isDark ? Colors.white70 : const Color(0xFF475569),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            booking.hotelName,
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w700,
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Icon(Icons.calendar_month_outlined, size: 14, color: theme.colorScheme.primary),
+                    const SizedBox(width: 6),
+                    Text(
+                      '${booking.arrivalDate.format()} → ${booking.departureDate.format()} (${booking.nights} ${booking.nights == 1 ? "night" : "nights"})',
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                const Divider(height: 1),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total: ${AppMoneyFormat.formatPKRFromMinor(booking.totalAmountMinor)}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                    if (!isCancelled)
+                      TextButton(
+                        onPressed: () => customerController.cancelBooking(booking.id),
+                        style: TextButton.styleFrom(
+                          foregroundColor: const Color(0xFFEF4444),
+                          visualDensity: VisualDensity.compact,
+                        ),
+                        child: const Text('Cancel stay'),
+                      )
+                    else
+                      Text(
+                        'Cancelled',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: isDark ? Colors.white38 : const Color(0xFF94A3B8),
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                  ],
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 2),
-          Text(
-            '${booking.roomType} • Room ${booking.roomNumber}',
-            style: TextStyle(
-              fontSize: 13,
-              color: isDark ? Colors.white70 : const Color(0xFF475569),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Icon(Icons.calendar_month_outlined, size: 14, color: theme.colorScheme.primary),
-              const SizedBox(width: 6),
-              Text(
-                '${booking.arrivalDate.format()} → ${booking.departureDate.format()} (${booking.nights} ${booking.nights == 1 ? "night" : "nights"})',
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          const Divider(height: 1),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Total: ${AppMoneyFormat.formatPKRFromMinor(booking.totalAmountMinor)}',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-              if (!isCancelled)
-                TextButton(
-                  onPressed: () => customerController.cancelBooking(booking.id),
-                  style: TextButton.styleFrom(
-                    foregroundColor: const Color(0xFFEF4444),
-                    visualDensity: VisualDensity.compact,
-                  ),
-                  child: const Text('Cancel stay'),
-                ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }
